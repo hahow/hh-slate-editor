@@ -24,7 +24,8 @@
   "peerDependencies": {
     "prop-types": "^15.5.4",
     "react": "^15.0.0 || ^16.0.0",
-    "react-dom": "^15.0.0 || ^16.0.0"
+    "react-dom": "^15.0.0 || ^16.0.0",
+    "styled-components": "2.0.0"
   },
   "devDependencies": {
     "@svgr/rollup": "^2.4.1",
@@ -53,9 +54,23 @@
     "rollup-plugin-node-resolve": "^3.3.0",
     "rollup-plugin-peer-deps-external": "^2.2.0",
     "rollup-plugin-postcss": "^1.6.2",
-    "rollup-plugin-url": "^1.4.0"
+    "rollup-plugin-url": "^1.4.0",
+    "styled-components": "2.0.0"
   },
   "files": [
     "dist"
-  ]
+  ],
+  "dependencies": {
+    "is-hotkey": "^0.1.4",
+    "ismobilejs": "^0.5.1",
+    "joi-browser": "^13.4.0",
+    "lodash": "^4.17.11",
+    "react-fontawesome": "^1.6.1",
+    "react-responsive-modal": "^3.5.1",
+    "react-tooltip": "^3.9.0",
+    "slate": "^0.44.9",
+    "slate-html-serializer": "^0.7.33",
+    "slate-react": "https://github.com/hahow/slate/releases/download/slate-react%400.21.14/slate-react-0.21.14.tgz",
+    "slate-soft-break": "^0.9.0"
+  }
 }
