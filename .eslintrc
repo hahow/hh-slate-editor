@@ -1,23 +1,33 @@
 {
   "parser": "babel-eslint",
-  "extends": [
-    "standard",
-    "standard-react"
+  "extends": "airbnb",
+  "plugins": [
+    "react",
+    "jsx-a11y",
+    "import"
   ],
   "env": {
-    "es6": true
-  },
-  "plugins": [
-    "react"
-  ],
-  "parserOptions": {
-    "sourceType": "module"
+    "browser": true,
+    "jquery": true
   },
   "rules": {
-    // don't force es6 functions to include space before paren
-    "space-before-function-paren": 0,
-
-    // allow specifying true explicitly for boolean props
-    "react/jsx-boolean-value": 0
+    "no-restricted-globals": "error",
+    "no-mixed-operators": "off",
+    "no-underscore-dangle": "off",
+    "no-confusing-arrow": "off",
+    "jsx-a11y/no-static-element-interactions": "off",
+    "react/prefer-stateless-function": "off",
+    "react/forbid-prop-types": "off",
+    "react/sort-comp": "off",
+    "jsx-a11y/media-has-caption": "off",
+    "import/prefer-default-export": "off",
+    "import/no-named-as-default": "off",
+    "import/no-extraneous-dependencies": "off",
+    "jsx-a11y/no-noninteractive-element-to-interactive-role": "off",
+    "react/prop-types": "off",
+    "arrow-body-style": "off",
+    "react/no-danger": "off",
+    "camelcase": "off",
+    "react/no-did-update-set-state": "off"
   }
 }
