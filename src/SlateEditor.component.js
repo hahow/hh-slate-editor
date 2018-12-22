@@ -17,7 +17,7 @@ import InputDialog from './components/InputDialog.component';
 import LinkInputDialog from './components/LinkInputDialog.component';
 // import { UploadContainer } from '../uploader';
 import ErrorMessage from './components/ErrorMessage.component';
-import Tooltip from './components/Tooltip.component';
+// import Tooltip from './components/Tooltip.component';
 // import clearIcon from './assets/icon-clear.svg';
 
 import StyledSlateEditor from './SlateEditor.style';
@@ -732,7 +732,7 @@ class SlateEditor extends React.Component {
         data-for={tooltipId}
       >
         {icon}
-        <Tooltip id={tooltipId} position="bottom" />
+        {/*<Tooltip id={tooltipId} position="bottom" />*/}
       </button>
     );
   }
@@ -758,7 +758,7 @@ class SlateEditor extends React.Component {
         data-for={tooltipId}
       >
         {icon}
-        <Tooltip id={tooltipId} position="bottom" />
+        {/*<Tooltip id={tooltipId} position="bottom" />*/}
       </button>
     );
   }
@@ -789,7 +789,7 @@ class SlateEditor extends React.Component {
         data-for={tooltipId}
       >
         {icon}
-        <Tooltip id={tooltipId} position="bottom" />
+        {/*<Tooltip id={tooltipId} position="bottom" />*/}
       </button>
     );
   }
@@ -806,7 +806,7 @@ class SlateEditor extends React.Component {
         data-for="link-button"
       >
         <FontAwesome name="link" />
-        <Tooltip id="link-button" position="bottom" />
+        {/*<Tooltip id="link-button" position="bottom" />*/}
       </button>
     );
   }
@@ -829,7 +829,7 @@ class SlateEditor extends React.Component {
         data-for={tooltipId}
       >
         {icon}
-        <Tooltip id={tooltipId} position="bottom" />
+        {/*<Tooltip id={tooltipId} position="bottom" />*/}
       </button>
     );
   };
@@ -843,7 +843,7 @@ class SlateEditor extends React.Component {
       data-for="full-screen-button"
     >
       <FontAwesome name="arrows-alt" />
-      <Tooltip id="full-screen-button" position="bottom" />
+      {/*<Tooltip id="full-screen-button" position="bottom" />*/}
     </button>
   )
 
@@ -876,7 +876,7 @@ class SlateEditor extends React.Component {
       data-for="clear-format-button"
     >
       {/* <img src={clearIcon} alt="clear format icon" /> */}
-      <Tooltip id="clear-format-button" position="bottom" />
+      {/*<Tooltip id="clear-format-button" position="bottom" />*/}
     </button>
   );
 
