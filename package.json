@@ -61,13 +61,13 @@
     "dist"
   ],
   "dependencies": {
+    "immutable": "^4.0.0-rc.12",
     "is-hotkey": "^0.1.4",
     "ismobilejs": "^0.5.1",
     "joi-browser": "^13.4.0",
     "lodash": "^4.17.11",
     "react-fontawesome": "^1.6.1",
     "react-responsive-modal": "^3.5.1",
-    "react-tooltip": "^3.9.0",
     "slate": "^0.44.9",
     "slate-html-serializer": "^0.7.33",
     "slate-react": "https://github.com/hahow/slate/releases/download/slate-react%400.21.14/slate-react-0.21.14.tgz",
