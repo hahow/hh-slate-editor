@@ -1,7 +1,7 @@
 import isMobile from 'ismobilejs';
 import merge from 'lodash/merge';
 import get from 'lodash/get';
-import FontAwesome from 'react-fontawesome';
+// import FontAwesome from 'react-fontawesome';
 import styled from 'styled-components';
 import { component, opacity, typography, ZINDEX } from '../../styles/theme';
 
@@ -101,8 +101,10 @@ export const StyledCloseButton = styled.div`
 `;
 
 // 一般 dialog 的右上角叉叉
+/*
 export const StyledCloseIcon = styled(FontAwesome).attrs({
   name: 'times-circle',
 }) `
   font-size: ${typography.font.size.h3};
 `;
+*/

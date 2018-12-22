@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
-import FontAwesome from 'react-fontawesome';
+// import FontAwesome from 'react-fontawesome';
 import { Input as StyledInput, RelativeDiv, PrefixConnector, UrlPrefix } from './Input.style';
 import ErrorMessage from '../ErrorMessage.component';
 
@@ -112,7 +112,7 @@ class Input extends Component {
         </RelativeDiv>
         {this.props.errorMessage ?
           <ErrorMessage>
-            <FontAwesome name="exclamation-triangle" />
+            {/*<FontAwesome name="exclamation-triangle" />*/}
             {this.props.errorMessage}
           </ErrorMessage> : null
         }

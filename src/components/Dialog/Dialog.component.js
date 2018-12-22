@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import Modal from 'react-responsive-modal';
 import get from 'lodash/get';
 import noop from 'lodash/noop';
-import { StyledTitle, StyledContent, StyledCloseButton, StyledCloseIcon, getModalStyles } from './Dialog.style';
+import { StyledTitle, StyledContent, StyledCloseButton, getModalStyles } from './Dialog.style';
 
 class Dialog extends Component {
   static propTypes = {
@@ -111,7 +111,7 @@ class Dialog extends Component {
           <div onClick={onClose}>
             <StyledCloseButton className="absolute" style={get(this.props.styles, 'closeButton')}>
               {closeButtonText}
-              <StyledCloseIcon className="close-icon marg-l-5" style={get(this.props.styles, 'closeIcon')} />
+              {/*<StyledCloseIcon className="close-icon marg-l-5" style={get(this.props.styles, 'closeIcon')} />*/}
             </StyledCloseButton>
           </div>
         )}

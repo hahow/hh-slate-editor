@@ -6,7 +6,10 @@
 
 import PropTypes from 'prop-types';
 import React from 'react';
-import FontAwesome from 'react-fontawesome';
+// import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+// import { faBold } from '@fortawesome/free-solid-svg-icons/faBold';
+import { library } from '@fortawesome/react-fontawesome';
+
 import { Editor, getEventTransfer } from 'slate-react';
 import SoftBreak from 'slate-soft-break';
 import debounce from 'lodash/debounce';
@@ -805,7 +808,7 @@ class SlateEditor extends React.Component {
         data-tip="超連結 (⌘+K)"
         data-for="link-button"
       >
-        <FontAwesome name="link" />
+        {/* <FontAwesomeIcon icon={faLink} /> */}
         {/*<Tooltip id="link-button" position="bottom" />*/}
       </button>
     );
@@ -842,7 +845,7 @@ class SlateEditor extends React.Component {
       data-tip="全螢幕"
       data-for="full-screen-button"
     >
-      <FontAwesome name="arrows-alt" />
+      {/*<FontAwesome name="arrows-alt" />*/}
       {/*<Tooltip id="full-screen-button" position="bottom" />*/}
     </button>
   )
@@ -883,24 +886,24 @@ class SlateEditor extends React.Component {
   renderToolbar = () => (
     <div className="panel-default panel-heading toolbar-menu">
       <div className="button-group">
-        {this.renderMarkButton('bold', <FontAwesome name="bold" />, '粗體 (⌘+B)', 'bold-button')}
-        {this.renderMarkButton('italic', <FontAwesome name="italic" />, '斜體 (⌘+I)', 'italic-button')}
-        {this.renderBlockButton('pre', <FontAwesome name="code" />, '程式碼區塊', 'code-button')}
-        {this.renderBlockButton('heading-four', <FontAwesome name="header" />, '標題', 'heading-button')}
-        {this.renderBlockButton('block-quote', <FontAwesome name="quote-right" />, '引用區塊', 'blockquote-button')}
+        {this.renderMarkButton('bold', null, /*<FontAwesomeIcon icon="bold" />*/ '粗體 (⌘+B)', 'bold-button')}
+        {this.renderMarkButton('italic', null /*<FontAwesomeIcon name="italic" />*/, '斜體 (⌘+I)', 'italic-button')}
+        {this.renderBlockButton('pre', null /*<FontAwesomeIcon name="code" />*/, '程式碼區塊', 'code-button')}
+        {this.renderBlockButton('heading-four', null /*<FontAwesomeIcon name="header" />*/, '標題', 'heading-button')}
+        {this.renderBlockButton('block-quote', null /*<FontAwesomeIcon name="quote-right" />*/, '引用區塊', 'blockquote-button')}
         {this.renderClearFormatButton()}
       </div>
       <div className="button-group">
-        {this.renderListButton('numbered-list', <FontAwesome name="list-ol" />, '編號清單', 'numbered-list-button')}
-        {this.renderListButton('bulleted-list', <FontAwesome name="list" />, '項目清單', 'bulleted-list-button')}
+        {this.renderListButton('numbered-list', null /*<FontAwesomeIcon name="list-ol" />*/, '編號清單', 'numbered-list-button')}
+        {this.renderListButton('bulleted-list', null /*<FontAwesomeIcon name="list" />*/, '項目清單', 'bulleted-list-button')}
       </div>
       <div className="button-group">
         {this.renderLinkButton()}
         {/*this.renderImageUploadButton()*/}
-        {this.renderButton(this.onClickGiphy, <FontAwesome name="giphy" />, 'Giphy', 'giphy-button')}
-        {this.renderButton(this.onClickYoutube, <FontAwesome name="youtube-play" />, 'Youtube', 'youtube-button')}
-        {this.renderButton(this.onClickVimeo, <FontAwesome name="vimeo-square" />, 'Vimeo', 'vimeo-button')}
-        {this.renderButton(this.onClickMixCloud, <FontAwesome name="mixcloud" />, 'Mixcloud', 'mixcloud-button')}
+        {this.renderButton(this.onClickGiphy, null /*<FontAwesomeIcon name="giphy" />, 'Giphy'*/, 'giphy-button')}
+        {this.renderButton(this.onClickYoutube, null /*<FontAwesomeIcon name="youtube-play" />*/, 'Youtube', 'youtube-button')}
+        {this.renderButton(this.onClickVimeo, null /*<FontAwesomeIcon name="vimeo-square" />*/, 'Vimeo', 'vimeo-button')}
+        {this.renderButton(this.onClickMixCloud, null /*<FontAwesomeIcon name="mixcloud" />*/, 'Mixcloud', 'mixcloud-button')}
       </div>
       {this.renderFullScreenButton()}
     </div>
@@ -1091,7 +1094,7 @@ class SlateEditor extends React.Component {
         </StyledSlateEditor>
         {this.props.errorMessage ?
           <ErrorMessage>
-            <FontAwesome name="exclamation-triangle" />
+            {/* <FontAwesomeIcon name="exclamation-triangle" /> */}
             {this.props.errorMessage}
           </ErrorMessage> : null
         }
