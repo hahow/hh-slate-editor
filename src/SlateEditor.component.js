@@ -18,7 +18,7 @@ import LinkInputDialog from './components/LinkInputDialog.component';
 // import { UploadContainer } from '../uploader';
 import ErrorMessage from './components/ErrorMessage.component';
 // import Tooltip from './components/Tooltip.component';
-// import clearIcon from './assets/icon-clear.svg';
+import clearIcon from './assets/icon-clear.svg';
 
 import StyledSlateEditor from './SlateEditor.style';
 import htmlSerializer from './utils/slateHtmlSerializer';
@@ -875,7 +875,7 @@ class SlateEditor extends React.Component {
       data-tip="清除格式"
       data-for="clear-format-button"
     >
-      {/* <img src={clearIcon} alt="clear format icon" /> */}
+      <img src={clearIcon} alt="clear format icon" />
       {/*<Tooltip id="clear-format-button" position="bottom" />*/}
     </button>
   );
