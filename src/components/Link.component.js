@@ -1,79 +1,196 @@
 import PropTypes from 'prop-types';
 import React from 'react';
+import FontAwesome from 'react-fontawesome';
 import styled from 'styled-components';
 
-const StyledIframe = styled.div`
-  .iframe-wrapper {
-    position: relative;
-    outline: ${props => (props.isSelected ? '3px solid blue' : 'none')};
+// import Tooltip from '../Tooltip';
+import { shortenHref } from '../utils/format';
+
+import { ZINDEX, opacity, color, component } from '../styles/theme';
+
+const StyledLinkMenu = styled.div`
+  display: none;
+  position: absolute;
+  margin-left: 15px;
+  margin-top: 8px;
+  z-index: ${ZINDEX.slate_hovering_menu};
+
+  .arrow-top {
+    position: absolute;
+    bottom: calc(100% - 1px);
+    left: 25px;
+    margin-left: -5px;
+    border-width: 6px;
+    border-style: solid;
+    border-color: transparent transparent rgba(0, 0, 0, ${opacity.low}) transparent;
+  }
+
+  .arrow-top::after {
+    content: "";
+    position: absolute;
+    left: -4px;
+    bottom: -6px;
+    border-width: 4px;
+    border-style: solid;
+    border-color: transparent transparent white;
+  }
+
+  * {
+    display: inline-block;
+  }
+
+  .href {
+    color: ${color.gray.dark};
+    border-bottom: none;
+  }
+
+  .menu-button {
+    color: ${color.gray.dark};
+    background-color: transparent;
+    border: 1px solid rgba(0, 0, 0, ${opacity.low});
+    border-radius: 3px;
     &:hover {
-      outline: 3px solid blue;
-      opacity: 0.8;
+      background-color: ${color.gray.lighter};
+    }
+    &:not(:first-child) {
+      border-left: none;
     }
   }
 
-  .iframe-mask {
-    display: ${props => (props.isSelected ? 'none' : 'block')};
-    position: absolute;
-    top: 0;
-    left: 0;
-    height: 100%;
-    width: 100%;
-    z-index: 1;
-  }
-
-  iframe {
-    display: block;
+  .menu-container {
+    padding: 6px 8px 5px;
+    color: rgba(0, 0, 0, ${opacity.high});
+    background-color: #fff;
+    border-radius: ${component.border.radius.lg};
+    border: 1px solid rgba(0, 0, 0, ${opacity.low});
+    transition: opacity 0.75s;
   }
 `;
 
-class Iframe extends React.Component {
+const LinkMenu = ({ menuRef, href, id, onOpenEditDialog, onRemoveLink }) => (
+  <StyledLinkMenu innerRef={menuRef} contentEditable={false}>
+    <div className="menu-container">
+      <div className="arrow-top" />
+      <a className="href marg-r-10 marg-l-5" spellCheck="false" href={href} target="_blank">{shortenHref(href)}</a>
+      <div>
+        <button
+          type="button"
+          className="menu-button"
+          onMouseDown={onOpenEditDialog}
+          data-for={`edit-link-btn-${id}`}
+          data-tip
+        >
+          <FontAwesome name="link" />
+        </button>
+        {/*<Tooltip id={`edit-link-btn-${id}`} position="bottom">編輯連結</Tooltip>*/}
+        <button
+          type="button"
+          className="menu-button"
+          onMouseDown={onRemoveLink}
+          data-for={`remove-link-btn-${id}`}
+          data-tip
+        >
+          <FontAwesome name="unlink" />
+        </button>
+        {/*<Tooltip id={`remove-link-btn-${id}`} position="bottom">移除連結</Tooltip>*/}
+      </div>
+    </div>
+  </StyledLinkMenu>
+);
+
+LinkMenu.propTypes = {
+  menuRef: PropTypes.func.isRequired,
+  href: PropTypes.string,
+  id: PropTypes.string.isRequired,
+  onOpenEditDialog: PropTypes.func.isRequired,
+  onRemoveLink: PropTypes.func.isRequired,
+};
+
+LinkMenu.defaultProps = {
+  href: '',
+};
+
+class Link extends React.Component {
   static propTypes = {
-    type: PropTypes.string.isRequired,
     node: PropTypes.object.isRequired,
-    isSelected: PropTypes.bool.isRequired,
     attributes: PropTypes.object.isRequired,
+    children: PropTypes.oneOfType([PropTypes.element, PropTypes.array]).isRequired,
+    isSelected: PropTypes.bool.isRequired,
+    onOpenEditDialog: PropTypes.func.isRequired,
+    onRemoveLink: PropTypes.func.isRequired,
   }
 
-  renderIframe() {
-    const type = this.props.type;
-    const src = this.props.node.data.get('src');
-    if (type === 'video') {
-      return (
-        <div className="video-container">
-          <iframe
-            title="video"
-            type="text/html"
-            src={src}
-            frameBorder="0"
-          />
-        </div>
-      );
-    } else if (type === 'audio') {
-      return (
-        <iframe
-          title="video"
-          type="text/html"
-          src={src}
-          frameBorder="0"
-          height="120px"
-        />
-      );
+  constructor(props) {
+    super(props);
+    this.linkRef = null;
+    this.menuRef = null;
+    this.menuIsOpen = false;
+  }
+
+  componentDidUpdate(prevProps) {
+    if (prevProps.isSelected !== this.props.isSelected) {
+      this.updateMenu();
     }
-    return null;
+  }
+
+  saveMenuRef = (menuRef) => {
+    this.menuRef = menuRef;
+  }
+
+  updateMenu = () => {
+    const menuRef = this.menuRef;
+    if (!menuRef) return;
+
+    const selection = window.getSelection();
+    if (this.props.isSelected && selection.isCollapsed) {
+      if (!this.linkRef) return;
+      menuRef.style.display = 'block';
+    } else {
+      menuRef.style.display = 'none';
+    }
+  }
+
+  closeMenu = () => {
+    this.menuRef.style.display = 'none';
   }
 
   render() {
+    const { node, attributes, children, onOpenEditDialog, onRemoveLink } = this.props;
+    const href = node.data.get('href');
+    const target = node.data.get('target');
     return (
-      <StyledIframe {...this.props.attributes} isSelected={this.props.isSelected}>
-        <div className="iframe-wrapper">
-          <div className="iframe-mask" />
-          {this.renderIframe()}
-        </div>
-      </StyledIframe>
+      <span>
+        <a
+          ref={(c) => { this.linkRef = c; }}
+          {...attributes}
+          href={href}
+          target={target}
+        >
+          {children}
+        </a>
+        <LinkMenu
+          menuRef={this.saveMenuRef}
+          href={href}
+          id={node.key}
+          onOpenEditDialog={() => {
+            if (onOpenEditDialog && node.key) {
+              this.closeMenu();
+              /*
+                This is a workaround !
+                It seems closeMenu may have async behavior, while current activeElement
+                was not displayed anymore, it will automatically focus on parenet element.
+                So here, we make onOpenEditDialog async, so that the focus can work properly.
+              */
+              setTimeout(() => {
+                onOpenEditDialog(node.key);
+              });
+            }
+          }}
+          onRemoveLink={onRemoveLink}
+        />
+      </span>
     );
   }
 }
 
-export default Iframe;
-
+export default Link;
