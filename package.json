@@ -61,6 +61,7 @@
     "dist"
   ],
   "dependencies": {
+    "font-awesome": "^4.7.0",
     "immutable": "^4.0.0-rc.12",
     "is-hotkey": "^0.1.4",
     "ismobilejs": "^0.5.1",
