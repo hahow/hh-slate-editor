@@ -17,7 +17,7 @@ import InputDialog from './components/InputDialog.component';
 import LinkInputDialog from './components/LinkInputDialog.component';
 // import { UploadContainer } from '../uploader';
 import ErrorMessage from './components/ErrorMessage.component';
-// import Tooltip from './components/Tooltip.component';
+import Tooltip from './components/Tooltip.component';
 import clearIcon from './assets/icon-clear.svg';
 
 import StyledSlateEditor from './SlateEditor.style';
@@ -719,21 +719,20 @@ class SlateEditor extends React.Component {
    * @param {Element} icon - react element to be shown as button icon
    * @return {Element}
    */
-  renderMarkButton = (type, icon, tooltipText, tooltipId) => {
+  renderMarkButton = (type, icon, tooltipText) => {
     const isActive = this.hasMark(type);
     const onMouseDown = event => this.onClickMark(event, type);
     return (
-      <button
-        type="button"
-        className="button btn btn-default btn-sm"
-        onMouseDown={onMouseDown}
-        data-active={isActive}
-        data-tip={tooltipText}
-        data-for={tooltipId}
-      >
-        {icon}
-        {/*<Tooltip id={tooltipId} position="bottom" />*/}
-      </button>
+      <Tooltip placement="bottom" overlay={tooltipText}>
+        <button
+          type="button"
+          className="button btn btn-default btn-sm"
+          onMouseDown={onMouseDown}
+          data-active={isActive}
+        >
+          {icon}
+        </button>
+      </Tooltip>
     );
   }
 
@@ -745,21 +744,20 @@ class SlateEditor extends React.Component {
    * @param {Element} icon - react element to be shown as button icon
    * @return {Element}
    */
-  renderBlockButton = (type, icon, tooltipText, tooltipId) => {
+  renderBlockButton = (type, icon, tooltipText) => {
     const isActive = this.hasBlock(type);
     const onMouseDown = event => this.onClickNonListBlock(event, type);
     return (
-      <button
-        type="button"
-        className="button btn btn-default btn-sm"
-        onMouseDown={onMouseDown}
-        data-active={isActive}
-        data-tip={tooltipText}
-        data-for={tooltipId}
-      >
-        {icon}
-        {/*<Tooltip id={tooltipId} position="bottom" />*/}
-      </button>
+      <Tooltip placement="bottom" overlay={tooltipText}>
+        <button
+          type="button"
+          className="button btn btn-default btn-sm"
+          onMouseDown={onMouseDown}
+          data-active={isActive}
+        >
+          {icon}
+        </button>
+      </Tooltip>
     );
   }
 
@@ -771,7 +769,7 @@ class SlateEditor extends React.Component {
    * @param {Element} icon - react element to be shown as button icon
    * @return {Element}
    */
-  renderListButton = (type, icon, tooltipText, tooltipId) => {
+  renderListButton = (type, icon, tooltipText) => {
     const { value } = this.state;
     const { document } = value;
     const isActive = value.blocks.some(block => !!document.getClosest(
@@ -780,34 +778,32 @@ class SlateEditor extends React.Component {
     ));
     const onMouseDown = event => this.onClickList(event, type);
     return (
-      <button
-        type="button"
-        className="button btn btn-default btn-sm"
-        onMouseDown={onMouseDown}
-        data-active={isActive}
-        data-tip={tooltipText}
-        data-for={tooltipId}
-      >
-        {icon}
-        {/*<Tooltip id={tooltipId} position="bottom" />*/}
-      </button>
+      <Tooltip placement="bottom" overlay={tooltipText}>
+        <button
+          type="button"
+          className="button btn btn-default btn-sm"
+          onMouseDown={onMouseDown}
+          data-active={isActive}
+        >
+          {icon}
+        </button>
+      </Tooltip>
     );
   }
 
   renderLinkButton = () => {
     const hasLinks = this.hasLinks();
     return (
-      <button
-        type="button"
-        className="button btn btn-default btn-sm"
-        onMouseDown={this.onClickLink}
-        data-active={hasLinks}
-        data-tip="超連結 (⌘+K)"
-        data-for="link-button"
-      >
-        <FontAwesome name="link" />
-        {/*<Tooltip id="link-button" position="bottom" />*/}
-      </button>
+      <Tooltip placement="bottom" overlay="超連結">
+        <button
+          type="button"
+          className="button btn btn-default btn-sm"
+          onMouseDown={this.onClickLink}
+          data-active={hasLinks}
+        >
+          <FontAwesome name="link" />
+        </button>
+      </Tooltip>
     );
   }
 
@@ -818,33 +814,31 @@ class SlateEditor extends React.Component {
    * @param {Element} icon - react element to be shown as button icon
    * @return {Element}
    */
-  renderButton = (onMouseDown, icon, tooltipText, tooltipId) => {
+  renderButton = (onMouseDown, icon, tooltipText) => {
     const mouseDown = event => onMouseDown(event);
     return (
-      <button
-        type="button"
-        className="button btn btn-default btn-sm"
-        onMouseDown={mouseDown}
-        data-tip={tooltipText}
-        data-for={tooltipId}
-      >
-        {icon}
-        {/*<Tooltip id={tooltipId} position="bottom" />*/}
-      </button>
+      <Tooltip placement="bottom" overlay={tooltipText}>
+        <button
+          type="button"
+          className="button btn btn-default btn-sm"
+          onMouseDown={mouseDown}
+        >
+          {icon}
+        </button>
+      </Tooltip>
     );
   };
 
   renderFullScreenButton = () => (
-    <button
-      type="button"
-      className="button btn btn-default btn-sm full-screen-btn"
-      onClick={this.onClickFullScreen}
-      data-tip="全螢幕"
-      data-for="full-screen-button"
-    >
-      <FontAwesome name="arrows-alt" />
-      {/*<Tooltip id="full-screen-button" position="bottom" />*/}
-    </button>
+    <Tooltip placement="bottom" overlay="全螢幕">
+      <button
+        type="button"
+        className="button btn btn-default btn-sm full-screen-btn"
+        onClick={this.onClickFullScreen}
+      >
+        <FontAwesome name="arrows-alt" />
+      </button>
+    </Tooltip>
   )
 
   /*
@@ -868,16 +862,15 @@ class SlateEditor extends React.Component {
   );*/
 
   renderClearFormatButton = () => (
-    <button
-      type="button"
-      className="button btn btn-default btn-sm"
-      onClick={this.onClickClearFormat}
-      data-tip="清除格式"
-      data-for="clear-format-button"
-    >
-      <img src={clearIcon} alt="clear format icon" />
-      {/*<Tooltip id="clear-format-button" position="bottom" />*/}
-    </button>
+    <Tooltip placement="bottom" overlay="清除格式">
+      <button
+        type="button"
+        className="button btn btn-default btn-sm"
+        onClick={this.onClickClearFormat}
+      >
+        <img src={clearIcon} alt="clear format icon" />
+      </button>
+    </Tooltip>
   );
 
   renderToolbar = () => (
