@@ -3,13 +3,14 @@
 > Slate Editor customized by Hahow
 
 ## Install
+找 release 裡面的檔案，複製網址。例如：
 
 ```bash
-npm install --save hh-slate-editor
+npm install --save https://github.com/hahow/hh-slate-editor/releases/download/1.0.1/hh-slate-editor-1.0.1.tgz
 ```
 or
 ```bash
-yarn add hh-slate-editor
+yarn add https://github.com/hahow/hh-slate-editor/releases/download/1.0.1/hh-slate-editor-1.0.1.tgz
 ```
 
 ## ScreenShot
