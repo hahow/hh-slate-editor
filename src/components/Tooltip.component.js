@@ -25,8 +25,7 @@ export default function Tooltip({
       overlayClassName={overlayClassName}
       mouseLeaveDelay={0}
       {...restProps}
-    >
-{children}
+    >{children}
     </ReactTooltip>
   );
 }

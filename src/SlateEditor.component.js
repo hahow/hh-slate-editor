@@ -15,7 +15,7 @@ import Iframe from './components/Iframe.component';
 import Link from './components/Link.component';
 import InputDialog from './components/InputDialog.component';
 import LinkInputDialog from './components/LinkInputDialog.component';
-// import { UploadContainer } from '../uploader';
+import UploadContainer from './components/UploadContainer.component';
 import ErrorMessage from './components/ErrorMessage.component';
 import Tooltip from './components/Tooltip.component';
 import clearIcon from './assets/icon-clear.svg';
@@ -841,25 +841,21 @@ class SlateEditor extends React.Component {
     </Tooltip>
   )
 
-  /*
   renderImageUploadButton = () => (
-    <UploadContainer
-      onUpload={this.props.uploadImage}
-      fulfilledCallback={this.onImageUploaded}
-      onValidateFailed={null}
-      validator={null}
-      accept="image/*"
-      data-tip="圖片"
-      data-for="image-button"
-      type="button"
-      className="no-style-container button btn btn-default btn-sm"
-    >
-      <div>
+    <Tooltip placement="bottom" overlay="圖片">
+      <UploadContainer
+        onUpload={this.props.uploadImage}
+        fulfilledCallback={this.onImageUploaded}
+        onValidateFailed={null}
+        validator={null}
+        accept="image/*"
+        type="button"
+        className="no-style-container button btn btn-default btn-sm"
+      >
         <FontAwesome name="picture-o" />
-        <Tooltip id="image-button" position="bottom" />
-      </div>
-    </UploadContainer>
-  );*/
+      </UploadContainer>
+    </Tooltip>
+  );
 
   renderClearFormatButton = () => (
     <Tooltip placement="bottom" overlay="清除格式">
@@ -889,7 +885,7 @@ class SlateEditor extends React.Component {
       </div>
       <div className="button-group">
         {this.renderLinkButton()}
-        {/*this.renderImageUploadButton()*/}
+        {this.renderImageUploadButton()}
         {this.renderButton(this.onClickGiphy, <FontAwesome name="giphy" />, 'Giphy', 'giphy-button')}
         {this.renderButton(this.onClickYoutube, <FontAwesome name="youtube-play" />, 'Youtube', 'youtube-button')}
         {this.renderButton(this.onClickVimeo, <FontAwesome name="vimeo-square" />, 'Vimeo', 'vimeo-button')}
