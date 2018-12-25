@@ -64,7 +64,7 @@ class UploadContainer extends Component {
   render() {
     const { children, className, ...restProps } = this.props;
     return (
-      <div className={className} {...restProps}>
+      <button className={className} {...restProps}>
         <FileInput
           type="file"
           accept={this.props.accept}
@@ -80,7 +80,7 @@ class UploadContainer extends Component {
             })
           }
         </div>
-      </div>
+      </button>
     );
   }
 }
