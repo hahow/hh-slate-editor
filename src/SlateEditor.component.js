@@ -118,6 +118,7 @@ class SlateEditor extends React.Component {
     normalizeValue: PropTypes.bool,
     normalizePastedValue: PropTypes.bool,
     errorMessage: PropTypes.string,
+    className: PropTypes.string,
   };
 
   static defaultProps = {
@@ -131,6 +132,7 @@ class SlateEditor extends React.Component {
     normalizeValue: false,
     normalizePastedValue: true,
     errorMessage: '',
+    className: '',
   };
 
   constructor(props) {
