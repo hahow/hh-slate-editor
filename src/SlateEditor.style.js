@@ -36,6 +36,7 @@ const StyledSlateEditor = StyledRichTextView.extend`
     background-color: #f5f5f5;
     border-color: #ddd;
     position: relative;
+    border-bottom: 1px solid #ddd;
   }
 
   .toolbar-menu .button {
@@ -56,7 +57,7 @@ const StyledSlateEditor = StyledRichTextView.extend`
       font-size: 14px;
     }
     img {
-      margin-top: 5px;
+      margin-top: 9px;
       width: 16px;
       height: auto;
     }
@@ -93,7 +94,7 @@ const StyledSlateEditor = StyledRichTextView.extend`
     height: 20px;
     background-size: 18px 20px;
     margin-left: -2px;
-    margin-top: 2px;
+    margin-top: 7px;
   }
 
   .toolbar-menu .button .fa-mixcloud {
@@ -136,6 +137,10 @@ const StyledSlateEditor = StyledRichTextView.extend`
 
   .slate-full-screen-mode .editing-area {
     height: 100%;
+  }
+
+  .flex {
+    display: flex;
   }
 `;
 

@@ -105,4 +105,5 @@ export const StyledCloseIcon = styled(FontAwesome).attrs({
   name: 'times-circle',
 }) `
   font-size: ${typography.font.size.h3};
+  cursor: pointer;
 `;

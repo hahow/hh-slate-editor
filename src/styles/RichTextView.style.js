@@ -54,6 +54,7 @@ export const StyledRichTextView = styled.div`
   a {
     color: ${color.brand.primary.base};
     border-bottom: 1px solid ${color.brand.primary.base};
+
     &:visited,
     &:focus {
       color: ${color.brand.primary.base};
@@ -89,6 +90,7 @@ export const StyledRichTextView = styled.div`
   }
 
   h4 {
+    text-align: left;
     margin-bottom: 16px;
     margin-top: 40px;
     padding-bottom: 8px;
@@ -233,5 +235,23 @@ export const StyledRichTextView = styled.div`
     background-size: 22px 24px;
     margin-left: -2px;
     margin-top: 1px;
+  }
+
+  .video-container {
+    width: 100%;
+    height: auto;
+    position: relative;
+    overflow: hidden;
+    padding-top: 56.2%;
+
+    iframe,
+    video {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      top: 0;
+      left: 0;
+      border: none;
+    }
   }
 `;

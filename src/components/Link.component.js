@@ -64,6 +64,11 @@ const StyledLinkMenu = styled.div`
     border-radius: ${component.border.radius.lg};
     border: 1px solid rgba(0, 0, 0, ${opacity.low});
     transition: opacity 0.75s;
+
+    a {
+      color: ${color.gray.dark};
+      border-bottom: none;
+    }
   }
 `;
 
@@ -71,7 +76,12 @@ const LinkMenu = ({ menuRef, href, id, onOpenEditDialog, onRemoveLink }) => (
   <StyledLinkMenu innerRef={menuRef} contentEditable={false}>
     <div className="menu-container">
       <div className="arrow-top" />
-      <a className="href marg-r-10 marg-l-5" spellCheck="false" href={href} target="_blank">{shortenHref(href)}</a>
+      <a
+        style={{ marginRight: '10px', marginLeft: '5px' }}
+        spellCheck="false"
+        href={href}
+        target="_blank"
+      >{shortenHref(href)}</a>
       <div>
         <button
           type="button"

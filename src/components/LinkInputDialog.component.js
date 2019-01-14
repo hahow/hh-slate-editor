@@ -85,7 +85,7 @@ class LinkInputDialog extends Component {
   renderUrlInput = () => {
     const { url, urlValidator } = this.props;
     return (
-      <div className="input-wrapper marg-b-5">
+      <div className="input-wrapper" style={{ marginBottom: '5px' }}>
         <span>連結：</span>
         <ValidateInput
           type="text"
@@ -104,7 +104,7 @@ class LinkInputDialog extends Component {
   renderTextInput = () => {
     const { text, textValidator } = this.props;
     return (
-      <div className="input-wrapper marg-b-5">
+      <div className="input-wrapper" style={{ marginBottom: '5px' }}>
         <span>顯示文字：</span>
         <ValidateInput
           type="text"
@@ -138,17 +138,21 @@ class LinkInputDialog extends Component {
         title={title}
         onClose={onClose}
       >
-        <div className="pad-l-40 pad-r-40 pad-b-20">
-          <p className="marg-b-15">{introText}</p>
+        <div style={{
+          paddingLeft: '40px',
+          paddingRight: '40px',
+          paddingBottom: '20px',
+        }}>
+          <p style={{ marginBottom: '15px' }}>{introText}</p>
           {this.renderUrlInput()}
           {showTextInput ? this.renderTextInput() : null}
-          <div className="marg-b-20">
+          <div style={{ marginBottom: '20px' }}>
             <input id="open-in-new-window" type="checkbox" onChange={onChangeOpenInNewWindow} checked={openInNewWindow} />
-            <label htmlFor="open-in-new-window" className="marg-l-10"> 在新視窗開啟 </label>
+            <label htmlFor="open-in-new-window" style={{ marginLeft: '10px' }}> 在新視窗開啟 </label>
           </div>
           <Button
             disabled={!this.state.urlIsValid || (!this.state.textIsValid && showTextInput)}
-            className="marg-t-15"
+            style={{ marginTop: '15px' }}
             onClick={onSubmit}
             size="md"
             block
