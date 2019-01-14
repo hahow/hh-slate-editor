@@ -25,6 +25,7 @@ import htmlSerializer from './utils/slateHtmlSerializer';
 import { isBoldHotkey, isItalicHotkey, isLinkHotKey, isTab } from './utils/hotkey';
 import { editorJoiSchema } from './utils/joiValidator';
 import normalize from './utils/htmlNormalization';
+import GlobalStyleDiv from './styles/global.style';
 
 const DEFAULT_NODE = 'paragraph';
 
@@ -1066,7 +1067,7 @@ class SlateEditor extends React.Component {
 
   render() {
     return (
-      <div className={this.props.className}>
+      <GlobalStyleDiv className={this.props.className}>
         <StyledSlateEditor
           className="slate-editor"
           fullScreenMode={this.state.fullScreenMode}
@@ -1086,7 +1087,7 @@ class SlateEditor extends React.Component {
             {this.props.errorMessage}
           </ErrorMessage> : null
         }
-      </div>
+      </GlobalStyleDiv>
     );
   }
 }

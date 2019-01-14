@@ -4,6 +4,7 @@ import Modal from 'react-responsive-modal';
 import get from 'lodash/get';
 import noop from 'lodash/noop';
 import { StyledTitle, StyledContent, StyledCloseButton, StyledCloseIcon, getModalStyles } from './Dialog.style';
+import GlobalStyleDiv from '../../styles/global.style';
 
 class Dialog extends Component {
   static propTypes = {
@@ -99,35 +100,37 @@ class Dialog extends Component {
           }, 500);
         }}
       >
+        <GlobalStyleDiv>
         {title &&
-        <StyledTitle
-          style={{
-            ...titleStyles,
-            paddingTop: '15px',
-            paddingBottom: '15px',
-          }}
-          className={`${(!isTextCloseButton) && 'text-center'}`}
-        >
-          {title}
-        </StyledTitle>
-        }
-        {isTextCloseButton && (
-          <div onClick={onClose}>
-            <StyledCloseButton style={{
-              ...get(this.props.styles, 'closeButton'),
-              position: 'absolute',
-            }}>
-              {closeButtonText}
-              <StyledCloseIcon className="close-icon" style={{
-                ...get(this.props.styles, 'closeIcon'),
-                marginLeft: '5px',
-              }} />
-            </StyledCloseButton>
-          </div>
-        )}
-        <StyledContent overflow={this.props.overflow}>
-          {children}
-        </StyledContent>
+          <StyledTitle
+            style={{
+              ...titleStyles,
+              paddingTop: '15px',
+              paddingBottom: '15px',
+            }}
+            className={`${(!isTextCloseButton) && 'text-center'}`}
+          >
+            {title}
+          </StyledTitle>
+          }
+          {isTextCloseButton && (
+            <div onClick={onClose}>
+              <StyledCloseButton style={{
+                ...get(this.props.styles, 'closeButton'),
+                position: 'absolute',
+              }}>
+                {closeButtonText}
+                <StyledCloseIcon className="close-icon" style={{
+                  ...get(this.props.styles, 'closeIcon'),
+                  marginLeft: '5px',
+                }} />
+              </StyledCloseButton>
+            </div>
+          )}
+          <StyledContent overflow={this.props.overflow}>
+            {children}
+          </StyledContent>
+        </GlobalStyleDiv>
       </Modal>
     );
   }
