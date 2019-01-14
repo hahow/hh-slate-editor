@@ -113,7 +113,10 @@ class Dialog extends Component {
         }
         {isTextCloseButton && (
           <div onClick={onClose}>
-            <StyledCloseButton className="absolute" style={get(this.props.styles, 'closeButton')}>
+            <StyledCloseButton style={{
+              ...get(this.props.styles, 'closeButton'),
+              position: 'absolute',
+            }}>
               {closeButtonText}
               <StyledCloseIcon className="close-icon" style={{
                 ...get(this.props.styles, 'closeIcon'),

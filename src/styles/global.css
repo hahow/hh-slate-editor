@@ -1,0 +1,50 @@
+html {
+  font-size: 10px;
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+}
+
+body {
+  font-family: '"PingFang TC", "微軟正黑體", sans-serif';
+  font-size: 16px;
+  color: 'rgba(0, 0, 0, 0.65)';
+  background-color: '#f3f3f1';
+  margin: 0;
+  padding: 0;
+  min-height: 100vh;
+}
+
+pre {
+  font-family: '"PingFang TC", "微軟正黑體", sans-serif';
+}
+
+img {
+  width: 100%;
+}
+
+a,
+a:visited,
+a:hover,
+a:active,
+a:focus,
+input,
+select,
+textarea {
+  outline: none;
+  text-decoration: none;
+}
+
+/* override bootstrap input button font size */
+input,
+button {
+  font-size: 16px;
+}
+
+.btn-default {
+  background: transparent;
+}
+
+/* alignment */
+::selection {
+  background: #fa8b00;
+  color: white;
+}
