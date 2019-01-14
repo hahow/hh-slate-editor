@@ -15,6 +15,7 @@ const GlobalStyleDiv = styled.div`
     color: rgba(0, 0, 0, ${opacity.high});
     font-weight: ${typography.weight.bold};
     line-height: ${typography.headings.line.height};
+    text-align: center;
     margin-top: 10px;
     margin-bottom: 10px;
   }
@@ -80,10 +81,20 @@ const GlobalStyleDiv = styled.div`
     border: 1px solid rgba(0, 0, 0, ${opacity.medium});
   }
 
-  /* override bootstrap input button font size */
-  input,
   button {
     font-size: ${typography.font.size.base};
+    font-family: ${typography.font.family.base};
+    line-height: ${typography.line.height.lg};
+    cursor: pointer;
+  }
+
+  input {
+    font-size: ${typography.font.size.base};
+    box-sizing: border-box;
+  }
+
+  label {
+    font-weight: 700;
   }
 
   .btn-default {

@@ -54,6 +54,7 @@ export const StyledRichTextView = styled.div`
   a {
     color: ${color.brand.primary.base};
     border-bottom: 1px solid ${color.brand.primary.base};
+
     &:visited,
     &:focus {
       color: ${color.brand.primary.base};
@@ -89,6 +90,7 @@ export const StyledRichTextView = styled.div`
   }
 
   h4 {
+    text-align: left;
     margin-bottom: 16px;
     margin-top: 40px;
     padding-bottom: 8px;

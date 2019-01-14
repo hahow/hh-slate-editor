@@ -5,7 +5,13 @@ import get from 'lodash/get';
 import noop from 'lodash/noop';
 import { StyledTitle, StyledContent, StyledCloseButton, StyledCloseIcon, getModalStyles } from './Dialog.style';
 import GlobalStyleDiv from '../../styles/global.style';
+import { injectGlobal } from 'styled-components';
 
+injectGlobal`
+  .rrm-close-button {
+    cursor: pointer;
+  }
+`;
 class Dialog extends Component {
   static propTypes = {
     /** 控制 dialog 顯示與否。使用者關閉 dialog 時應在 onClose 中將此值改回 false。 */
@@ -89,7 +95,10 @@ class Dialog extends Component {
         showCloseIcon={closeButtonText === null}
         closeIconSize={25}
         closeOnOverlayClick={closeOnOverlayClick}
-        classNames={{ overlay: 'lecture-editor-no-clickoutside' }}
+        classNames={{
+          overlay: 'lecture-editor-no-clickoutside',
+          closeButton: 'rrm-close-button'
+        }}
         container={container}
         blockScroll={shouldBlockScroll}
         onEntered={() => {

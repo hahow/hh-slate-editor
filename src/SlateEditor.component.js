@@ -873,26 +873,32 @@ class SlateEditor extends React.Component {
   );
 
   renderToolbar = () => (
-    <div className="panel-default panel-heading toolbar-menu">
+    <div className="toolbar-menu">
       <div className="button-group">
-        {this.renderMarkButton('bold', <FontAwesome name="bold" />, '粗體 (⌘+B)', 'bold-button')}
-        {this.renderMarkButton('italic', <FontAwesome name="italic" />, '斜體 (⌘+I)', 'italic-button')}
-        {this.renderBlockButton('pre', <FontAwesome name="code" />, '程式碼區塊', 'code-button')}
-        {this.renderBlockButton('heading-four', <FontAwesome name="header" />, '標題', 'heading-button')}
-        {this.renderBlockButton('block-quote', <FontAwesome name="quote-right" />, '引用區塊', 'blockquote-button')}
-        {this.renderClearFormatButton()}
+        <div className="flex">
+          {this.renderMarkButton('bold', <FontAwesome name="bold" />, '粗體 (⌘+B)', 'bold-button')}
+          {this.renderMarkButton('italic', <FontAwesome name="italic" />, '斜體 (⌘+I)', 'italic-button')}
+          {this.renderBlockButton('pre', <FontAwesome name="code" />, '程式碼區塊', 'code-button')}
+          {this.renderBlockButton('heading-four', <FontAwesome name="header" />, '標題', 'heading-button')}
+          {this.renderBlockButton('block-quote', <FontAwesome name="quote-right" />, '引用區塊', 'blockquote-button')}
+          {this.renderClearFormatButton()}
+        </div>
       </div>
       <div className="button-group">
-        {this.renderListButton('numbered-list', <FontAwesome name="list-ol" />, '編號清單', 'numbered-list-button')}
-        {this.renderListButton('bulleted-list', <FontAwesome name="list" />, '項目清單', 'bulleted-list-button')}
+        <div className="flex">
+          {this.renderListButton('numbered-list', <FontAwesome name="list-ol" />, '編號清單', 'numbered-list-button')}
+          {this.renderListButton('bulleted-list', <FontAwesome name="list" />, '項目清單', 'bulleted-list-button')}
+        </div>
       </div>
       <div className="button-group">
-        {this.renderLinkButton()}
-        {this.renderImageUploadButton()}
-        {this.renderButton(this.onClickGiphy, <FontAwesome name="giphy" />, 'Giphy', 'giphy-button')}
-        {this.renderButton(this.onClickYoutube, <FontAwesome name="youtube-play" />, 'Youtube', 'youtube-button')}
-        {this.renderButton(this.onClickVimeo, <FontAwesome name="vimeo-square" />, 'Vimeo', 'vimeo-button')}
-        {this.renderButton(this.onClickMixCloud, <FontAwesome name="mixcloud" />, 'Mixcloud', 'mixcloud-button')}
+        <div className="flex">
+          {this.renderLinkButton()}
+          {this.renderImageUploadButton()}
+          {this.renderButton(this.onClickGiphy, <FontAwesome name="giphy" />, 'Giphy', 'giphy-button')}
+          {this.renderButton(this.onClickYoutube, <FontAwesome name="youtube-play" />, 'Youtube', 'youtube-button')}
+          {this.renderButton(this.onClickVimeo, <FontAwesome name="vimeo-square" />, 'Vimeo', 'vimeo-button')}
+          {this.renderButton(this.onClickMixCloud, <FontAwesome name="mixcloud" />, 'Mixcloud', 'mixcloud-button')}
+        </div>
       </div>
       {this.renderFullScreenButton()}
     </div>

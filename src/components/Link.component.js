@@ -64,6 +64,11 @@ const StyledLinkMenu = styled.div`
     border-radius: ${component.border.radius.lg};
     border: 1px solid rgba(0, 0, 0, ${opacity.low});
     transition: opacity 0.75s;
+
+    a {
+      color: ${color.gray.dark};
+      border-bottom: none;
+    }
   }
 `;
 

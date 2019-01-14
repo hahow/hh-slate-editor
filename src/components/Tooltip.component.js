@@ -9,9 +9,10 @@ injectGlobal`
   .rc-tooltip-inner {
     padding: 8px 20px;
     background-color: #222;
-    border-radius: initial;
+    border-radius: 3px;
     box-shadow: none;
     font-size: 13px;
+    min-height: initial;
   }
 `;
 
