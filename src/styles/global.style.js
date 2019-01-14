@@ -5,8 +5,6 @@ import {
   scaffolding,
   typography,
   color,
-  PAD_DIRECTION,
-  PAD_SIZE,
   ZINDEX,
   FONT_SIZE_XXS,
   FONT_SIZE_S,
@@ -17,56 +15,6 @@ import {
   media,
 } from './theme';
 
-function generatePaddingMargin() {
-  let result = '';
-  const styleObjects = [
-    {
-      key: 'marg',
-      styleKey: 'margin',
-    },
-    {
-      key: 'pad',
-      styleKey: 'padding',
-    },
-  ];
-  for (let i = 0; i < styleObjects.length; i += 1) {
-    for (let j = 0; j < PAD_DIRECTION.length; j += 1) {
-      for (let k = 0; k < PAD_SIZE.length; k += 1) {
-        const styleObject = styleObjects[i];
-        const direction = PAD_DIRECTION[j];
-        const number = PAD_SIZE[k];
-        result += `.${styleObject.key}-${direction}-${number}{`;
-
-        // handle negative number
-        let handledNumber;
-        if (number.indexOf('n') === 0) {
-          handledNumber = number.replace('n', '-');
-        } else {
-          handledNumber = number;
-        }
-
-        if (direction === 't') {
-          result += `${styleObject.styleKey}-top: ${handledNumber}px;`;
-        } else if (direction === 'b') {
-          result += `${styleObject.styleKey}-bottom: ${handledNumber}px;`;
-        } else if (direction === 'r') {
-          result += `${styleObject.styleKey}-right: ${handledNumber}px;`;
-        } else if (direction === 'l') {
-          result += `${styleObject.styleKey}-left: ${handledNumber}px;`;
-        } else if (direction === 'tb') {
-          result += `${styleObject.styleKey}-top: ${handledNumber}px;`;
-          result += `${styleObject.styleKey}-bottom: ${handledNumber}px;`;
-        } else if (direction === 'rl') {
-          result += `${styleObject.styleKey}-right: ${handledNumber}px;`;
-          result += `${styleObject.styleKey}-left: ${handledNumber}px;`;
-        }
-        result += '}';
-      }
-    }
-  }
-  return result;
-}
-
 /* shadow */
 const depth1Shadow = '0 1px 2px';
 
@@ -74,9 +22,6 @@ const depth1Shadow = '0 1px 2px';
 injectGlobal`
   ${Typography}
   ${Form}
-  ${generatePaddingMargin()}
-
-  /** Scaffolding */
 
   /** Body reset */
 

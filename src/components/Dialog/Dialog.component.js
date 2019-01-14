@@ -101,8 +101,12 @@ class Dialog extends Component {
       >
         {title &&
         <StyledTitle
-          style={titleStyles}
-          className={`pad-tb-15 ${(!isTextCloseButton) && 'text-center'}`}
+          style={{
+            ...titleStyles,
+            paddingTop: '15px',
+            paddingBottom: '15px',
+          }}
+          className={`${(!isTextCloseButton) && 'text-center'}`}
         >
           {title}
         </StyledTitle>
@@ -111,7 +115,10 @@ class Dialog extends Component {
           <div onClick={onClose}>
             <StyledCloseButton className="absolute" style={get(this.props.styles, 'closeButton')}>
               {closeButtonText}
-              <StyledCloseIcon className="close-icon marg-l-5" style={get(this.props.styles, 'closeIcon')} />
+              <StyledCloseIcon className="close-icon" style={{
+                ...get(this.props.styles, 'closeIcon'),
+                marginLeft: '5px',
+              }} />
             </StyledCloseButton>
           </div>
         )}

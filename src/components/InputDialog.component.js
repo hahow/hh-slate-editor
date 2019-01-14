@@ -59,8 +59,12 @@ class InputDialog extends Component {
         title={title}
         onClose={onClose}
       >
-        <div className="pad-l-40 pad-r-40 pad-b-20">
-          <p className="marg-b-15">{text}</p>
+        <div style={{
+          paddingLeft: '40px',
+          paddingRight: '40px',
+          paddingBottom: '20px',
+        }}>
+          <p style={{ marginBottom: '15px' }}>{text}</p>
           <div className="input-wrapper">
 
             <ValidateInput
@@ -74,7 +78,13 @@ class InputDialog extends Component {
               onKeyPress={this.handleKeyPress}
             />
           </div>
-          <Button disabled={!this.state.isValid} className="marg-t-15" onClick={onSubmit} size="md" block>
+          <Button
+            disabled={!this.state.isValid}
+            style={{ marginTop: '15px' }}
+            onClick={onSubmit}
+            size="md"
+            block
+          >
             送出
           </Button>
         </div>
