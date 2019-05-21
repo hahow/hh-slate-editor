@@ -23,7 +23,7 @@ import clearIcon from './assets/icon-clear.svg';
 import StyledSlateEditor from './SlateEditor.style';
 import htmlSerializer from './utils/slateHtmlSerializer';
 import { isBoldHotkey, isItalicHotkey, isLinkHotKey, isTab } from './utils/hotkey';
-import { editorJoiSchema } from './utils/joiValidator';
+import { editorJoiSchema } from './utils/validator';
 import normalize from './utils/htmlNormalization';
 import GlobalStyleDiv from './styles/global.style';
 
@@ -126,7 +126,7 @@ class SlateEditor extends React.Component {
     value: '<p></p>',
     onChange: () => { },
     height: 350,
-    debounceTime: 250,
+    debounceTime: 100,
     debugMode: false,
     uploadImage: () => { },
     onWarning: () => {},
@@ -850,7 +850,7 @@ class SlateEditor extends React.Component {
         onUpload={this.props.uploadImage}
         fulfilledCallback={this.onImageUploaded}
         onValidateFailed={null}
-        validator={null}
+        validate={null}
         accept="image/*"
         type="button"
         className="no-style-container button btn btn-default btn-sm"
@@ -945,7 +945,7 @@ class SlateEditor extends React.Component {
             text="範例：https://giphy.com/gifs/oooxxx"
             value={this.state.dialogValue}
             isOpen
-            validator={editorJoiSchema.giphyUrl}
+            validate={editorJoiSchema.giphyUrl}
             onChange={onChange}
             onClose={onClose}
             onSubmit={() => {
@@ -961,7 +961,7 @@ class SlateEditor extends React.Component {
             text="範例：https://www.youtube.com/watch?v=oooxxx 或 https://youtu.be/oooxxx 或 https://www.youtube.com/embed/oooxxx"
             value={this.state.dialogValue}
             isOpen
-            validator={editorJoiSchema.youtubeUrl}
+            validate={editorJoiSchema.youtubeUrl}
             onChange={onChange}
             onClose={onClose}
             onSubmit={() => {
@@ -977,7 +977,7 @@ class SlateEditor extends React.Component {
             text="範例：https://vimeo.com/12345678 或 https://player.vimeo.com/video/12345678"
             value={this.state.dialogValue}
             isOpen
-            validator={editorJoiSchema.vimeoUrl}
+            validate={editorJoiSchema.vimeoUrl}
             onChange={onChange}
             onClose={onClose}
             onSubmit={() => {
@@ -993,7 +993,7 @@ class SlateEditor extends React.Component {
             text="範例：https://www.mixcloud.com/ooo/xxx/"
             value={this.state.dialogValue}
             isOpen
-            validator={editorJoiSchema.mixCloudUrl}
+            validate={editorJoiSchema.mixCloudUrl}
             onChange={onChange}
             onClose={onClose}
             onSubmit={() => {
@@ -1011,8 +1011,8 @@ class SlateEditor extends React.Component {
             url={this.state.dialogUrl}
             text={this.state.dialogText}
             openInNewWindow={this.state.openInNewWindow}
-            urlValidator={editorJoiSchema.url}
-            textValidator={editorJoiSchema.text}
+            urlValidate={editorJoiSchema.url}
+            textValidate={editorJoiSchema.text}
             onChangeUrl={onChangeUrl}
             onChangeText={onChangeText}
             onChangeOpenInNewWindow={onChangeOpenInNewWindow}
@@ -1036,8 +1036,8 @@ class SlateEditor extends React.Component {
             url={this.state.dialogUrl}
             text={this.state.dialogText}
             openInNewWindow={this.state.openInNewWindow}
-            urlValidator={editorJoiSchema.url}
-            textValidator={editorJoiSchema.text}
+            urlValidate={editorJoiSchema.url}
+            textValidate={editorJoiSchema.text}
             onChangeUrl={onChangeUrl}
             onChangeText={onChangeText}
             onChangeOpenInNewWindow={onChangeOpenInNewWindow}

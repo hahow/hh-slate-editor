@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import Joi from 'joi-browser';
 
 import Dialog from './Dialog';
 import Button from './Button';
@@ -15,12 +14,8 @@ class LinkInputDialog extends Component {
     url: PropTypes.string.isRequired,
     text: PropTypes.string.isRequired,
     openInNewWindow: PropTypes.bool.isRequired,
-    urlValidator: PropTypes.shape({
-      isJoi: PropTypes.bool.isRequired,
-    }).isRequired,
-    textValidator: PropTypes.shape({
-      isJoi: PropTypes.bool.isRequired,
-    }).isRequired,
+    urlValidate: PropTypes.func.isRequired,
+    textValidate: PropTypes.func.isRequired,
     onChangeUrl: PropTypes.func.isRequired,
     onChangeText: PropTypes.func.isRequired,
     onChangeOpenInNewWindow: PropTypes.func.isRequired,
@@ -35,8 +30,8 @@ class LinkInputDialog extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      urlIsValid: props.url ? Joi.validate(props.url, props.urlValidator) : false,
-      textIsValid: props.text ? Joi.validate(props.text, props.textValidator) : false,
+      urlIsValid: props.url ? urlValidate(props.url) : false,
+      textIsValid: props.text ? textValidate(props.text) : false,
     };
   }
 

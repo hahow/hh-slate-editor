@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import Joi from 'joi-browser';
 
 import Dialog from './Dialog';
 import Button from './Button';
@@ -12,9 +11,7 @@ class InputDialog extends Component {
     text: PropTypes.string.isRequired,
     value: PropTypes.string.isRequired,
     isOpen: PropTypes.bool.isRequired, // currently open or not
-    validator: PropTypes.shape({
-      isJoi: PropTypes.bool.isRequired,
-    }).isRequired,
+    validate: PropTypes.func.isRequired,
     onChange: PropTypes.func.isRequired,
     onClose: PropTypes.func.isRequired,
     onSubmit: PropTypes.func.isRequired,
@@ -23,7 +20,7 @@ class InputDialog extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      isValid: props.value ? Joi.validate(props.value, props.validator) : false,
+      isValid: props.value ? props.validate(props.value) : false,
     };
   }
 
