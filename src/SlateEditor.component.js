@@ -13,6 +13,7 @@ import debounce from 'lodash/debounce';
 
 import Iframe from './components/Iframe.component';
 import Link from './components/Link.component';
+import Image from './components/Image.component';
 import InputDialog from './components/InputDialog.component';
 import LinkInputDialog from './components/LinkInputDialog.component';
 import UploadContainer from './components/UploadContainer.component';
@@ -53,6 +54,13 @@ function unwrapLink(editor) {
 function setLinkByKey(editor, nodeKey, href, openInNewWindow) {
   const data = { href };
   if (openInNewWindow) { data.target = '_blank'; }
+  editor.setNodeByKey(nodeKey, {
+    data,
+  });
+}
+
+function setImageAltByKey(editor, nodeKey, alt, src) {
+  const data = { alt, src };
   editor.setNodeByKey(nodeKey, {
     data,
   });
@@ -393,6 +401,16 @@ class SlateEditor extends React.Component {
     });
   }
 
+  onOpenImgAltEditDialog = (nodeKey) => {
+    const node = this.state.value.document.getNode(nodeKey);
+    this.setState({
+      currentOpenDialog: 'edit-image-alt',
+      showTextInput: false,
+      dialogValue: node.data.get('alt'),
+      editNodeKey: nodeKey,
+    });
+  }
+
   onImageUploaded = (response) => {
     if (response && response.url) {
       const hasListItem = this.hasBlock('list-item');
@@ -526,11 +544,11 @@ class SlateEditor extends React.Component {
   willChangeContent = operations => operations.some(op => op.type !== 'set_selection');
 
   insertGiphy = (url) => {
-    const giphyRegExp = /\/\/giphy\.com\/gifs\/(\w*?-)*?(\w*?)$/;
+    const giphyRegExp = /\/\/giphy\.com\/gifs\/(\w*?-)*?(\w*?)\/html5$/;
     if (url && giphyRegExp.test(url)) {
       // generate embed link
       const giphyMatch = url.match(giphyRegExp);
-      const src = ['////i.giphy.com/', giphyMatch[2], '.gif'].join('');
+      const src = ['https://media.giphy.com/media/', giphyMatch[2], '/giphy.gif'].join('');
       const hasListItem = this.hasBlock('list-item');
       this.editor.command(insertImage, src, hasListItem);
     }
@@ -587,6 +605,10 @@ class SlateEditor extends React.Component {
 
   editLink = (nodeKey, href, openInNewWindow) => {
     this.editor.command(setLinkByKey, nodeKey, href, openInNewWindow);
+  }
+
+  editImageAlt = (nodeKey, alt, src) => {
+    this.editor.command(setImageAltByKey, nodeKey, alt, src);
   }
 
   /**
@@ -684,10 +706,12 @@ class SlateEditor extends React.Component {
         </Link>
       );
       case 'image': {
-        const src = node.data.get('src');
-        const className = isSelected ? 'active' : null;
-        const style = { display: 'block' };
-        return <img alt="img" src={src} className={className} style={style} {...attributes} />;
+        return <Image
+          node={node}
+          attributes={attributes}
+          isSelected={isSelected}
+          onOpenEditDialog={this.onOpenImgAltEditDialog}
+        />;
       }
       case 'test': {
         const className = node.data.get('className');
@@ -942,7 +966,7 @@ class SlateEditor extends React.Component {
         return (
           <InputDialog
             title="請輸入 Giphy 網址"
-            text="範例：https://giphy.com/gifs/oooxxx"
+            text="範例：https://giphy.com/gifs/oooxxx/html5"
             value={this.state.dialogValue}
             isOpen
             validate={editorJoiSchema.giphyUrl}
@@ -1047,6 +1071,27 @@ class SlateEditor extends React.Component {
                 this.state.editNodeKey,
                 this.state.dialogUrl,
                 this.state.openInNewWindow,
+              );
+              onClose();
+            }}
+          />
+        );
+      case 'edit-image-alt':
+        return (
+          <InputDialog
+            title="請輸入圖片說明文字"
+            value={this.state.dialogValue}
+            isOpen
+            validate={null}
+            onChange={onChange}
+            onClose={onClose}
+            onSubmit={() => {
+              const node = this.state.value.document.getNode(this.state.editNodeKey);
+              const src = node ? node.data.get('src') : '';
+              this.editImageAlt(
+                this.state.editNodeKey,
+                this.state.dialogValue,
+                src,
               );
               onClose();
             }}
