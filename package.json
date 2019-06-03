@@ -1,6 +1,6 @@
 {
   "name": "hh-slate-editor",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "Slate Editor customized by Hahow",
   "author": "barry800414",
   "license": "MIT",
@@ -66,7 +66,6 @@
     "immutable": "^4.0.0-rc.12",
     "is-hotkey": "^0.1.4",
     "ismobilejs": "^0.5.1",
-    "joi-browser": "^13.4.0",
     "lodash": "^4.17.11",
     "rc-tooltip": "^3.7.3",
     "react-fontawesome": "^1.6.1",

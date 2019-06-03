@@ -1,14 +1,11 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import Joi from 'joi-browser';
 import debounce from 'lodash/debounce';
 
 export default function withValidate(WrappedComponent) {
   return class extends Component {
     static propTypes = {
-      validator: PropTypes.shape({
-        isJoi: PropTypes.bool.isRequired,
-      }).isRequired,
+      validate: PropTypes.func.isRequired,
       onChange: PropTypes.func,
       onFail: PropTypes.func,
       errorMsg: PropTypes.string,
@@ -38,9 +35,9 @@ export default function withValidate(WrappedComponent) {
 
     doValidate = debounce((event) => {
       const value = this.getValue(event);
-      const result = Joi.validate(value, this.props.validator);
+      const result = this.props.validate(value);
       this.setState({ value });
-      if (result.error === null) {
+      if (result === true) {
         this.setState({ errorMessage: '' });
         if (this.props.onChange) {
           this.props.onChange(event);

@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import Joi from 'joi-browser';
 
 import Dialog from './Dialog';
 import Button from './Button';
@@ -15,12 +14,8 @@ class LinkInputDialog extends Component {
     url: PropTypes.string.isRequired,
     text: PropTypes.string.isRequired,
     openInNewWindow: PropTypes.bool.isRequired,
-    urlValidator: PropTypes.shape({
-      isJoi: PropTypes.bool.isRequired,
-    }).isRequired,
-    textValidator: PropTypes.shape({
-      isJoi: PropTypes.bool.isRequired,
-    }).isRequired,
+    urlValidate: PropTypes.func.isRequired,
+    textValidate: PropTypes.func.isRequired,
     onChangeUrl: PropTypes.func.isRequired,
     onChangeText: PropTypes.func.isRequired,
     onChangeOpenInNewWindow: PropTypes.func.isRequired,
@@ -35,8 +30,8 @@ class LinkInputDialog extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      urlIsValid: props.url ? Joi.validate(props.url, props.urlValidator) : false,
-      textIsValid: props.text ? Joi.validate(props.text, props.textValidator) : false,
+      urlIsValid: props.url ? props.urlValidate(props.url) : false,
+      textIsValid: props.text ? props.textValidate(props.text) : false,
     };
   }
 
@@ -83,7 +78,7 @@ class LinkInputDialog extends Component {
   }
 
   renderUrlInput = () => {
-    const { url, urlValidator } = this.props;
+    const { url, urlValidate } = this.props;
     return (
       <div className="input-wrapper" style={{ marginBottom: '5px' }}>
         <span>連結：</span>
@@ -91,7 +86,7 @@ class LinkInputDialog extends Component {
           type="text"
           value={url}
           onChange={this.onChangeUrl}
-          validator={urlValidator}
+          validate={urlValidate}
           onFail={this.onFailUrl}
           errorMsg="以 http:// 或 https:// 開頭"
           inputRef={(c) => { this.urlInput = c; }}
@@ -102,7 +97,7 @@ class LinkInputDialog extends Component {
   }
 
   renderTextInput = () => {
-    const { text, textValidator } = this.props;
+    const { text, textValidate } = this.props;
     return (
       <div className="input-wrapper" style={{ marginBottom: '5px' }}>
         <span>顯示文字：</span>
@@ -110,7 +105,7 @@ class LinkInputDialog extends Component {
           type="text"
           value={text}
           onChange={this.onChangeText}
-          validator={textValidator}
+          validate={textValidate}
           onFail={this.onFailText}
           errorMsg="請填入至少一個字"
           onKeyPress={this.props.showTextInput ? this.handleKeyPress : () => {}}

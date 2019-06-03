@@ -14,7 +14,7 @@ class UploadContainer extends Component {
     onCancel: PropTypes.func,
     fulfilledCallback: PropTypes.func,
     onValidateFailed: PropTypes.func,
-    validator: PropTypes.func,
+    validate: PropTypes.func,
     accept: PropTypes.string,
     className: PropTypes.string,
   };
@@ -25,7 +25,7 @@ class UploadContainer extends Component {
     fulfilledCallback: undefined,
     onCancel: undefined,
     onValidateFailed: null,
-    validator: undefined,
+    validate: undefined,
     accept: '',
     className: '',
   };
@@ -35,8 +35,8 @@ class UploadContainer extends Component {
     const file = this.file.files[0];
 
     if (onUpload && file) {
-      if (this.props.validator) {
-        const isValid = this.props.validator(file);
+      if (this.props.validate) {
+        const isValid = this.props.validate(file);
         if (isValid.result) {
           onUpload(file, fulfilledCallback);
         } else {
