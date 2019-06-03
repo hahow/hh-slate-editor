@@ -65,11 +65,12 @@ const rules = [
         }
         case 'image': {
           const src = el.getAttribute('src');
+          const alt = el.getAttribute('alt');
           return {
             object: 'block',
             type,
             nodes: next(el.childNodes),
-            data: { src },
+            data: { src, alt },
             isVoid: true,
           };
         }
@@ -100,7 +101,8 @@ const rules = [
         case 'paragraph': return <p>{children}</p>;
         case 'image': {
           const src = object.data.get('src');
-          return <img src={src} alt="" />;
+          const alt = object.data.get('alt');
+          return <img src={src} alt={alt} />;
         }
         case 'pre': return <pre>{children}</pre>;
         // while serialization, these 2 types sharing <iframe> tag
