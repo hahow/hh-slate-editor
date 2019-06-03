@@ -16,7 +16,7 @@ export const editorJoiSchema = {
   },
   giphyUrl: (input) => {
     if (input && typeof input === 'string') {
-      const regex = /\/\/giphy\.com\/gifs\/(\w*?-)*?(\w*?)$/;
+      const regex = /\/\/giphy\.com\/gifs\/(\w*?-)*?(\w*?)\/html5$/;
       if (regex.test(input)) {
         return true;
       }

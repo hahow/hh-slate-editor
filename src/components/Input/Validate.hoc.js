@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import debounce from 'lodash/debounce';
+import { throws } from 'assert';
+import { timingSafeEqual } from 'crypto';
 
 export default function withValidate(WrappedComponent) {
   return class extends Component {
@@ -34,8 +36,9 @@ export default function withValidate(WrappedComponent) {
     }
 
     doValidate = debounce((event) => {
+      const { validate } = this.props;
       const value = this.getValue(event);
-      const result = this.props.validate(value);
+      const result = validate ? validate(value) : true;
       this.setState({ value });
       if (result === true) {
         this.setState({ errorMessage: '' });
@@ -55,7 +58,9 @@ export default function withValidate(WrappedComponent) {
         <WrappedComponent
           value={this.state.value}
           {...this.props}
-          onChange={this.doValidate}
+          onChange={(event) => {
+            this.props.validate ? this.doValidate(event) : this.props.onChange(event)
+          }}
           errorMessage={this.state.errorMessage}
         />
       );

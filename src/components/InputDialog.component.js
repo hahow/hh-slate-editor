@@ -20,7 +20,9 @@ class InputDialog extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      isValid: props.value ? props.validate(props.value) : false,
+      isValid: props.validate ? (
+        props.value ? props.validate(props.value) : false
+      ) : true,
     };
   }
 
