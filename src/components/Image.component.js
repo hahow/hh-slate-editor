@@ -103,7 +103,7 @@ class InputEditDialog extends React.Component {
             <button
               onMouseDown={onOpenEditDialog}
               className="menu-button"
-            >更新</button>
+            >修改</button>
           </div>
         </div>
       </StyledInputEditDialog>
