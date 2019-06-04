@@ -582,7 +582,7 @@ class SlateEditor extends React.Component {
     const mixcloudRegExp = /(http:|https:)?\/\/www\.mixcloud\.com\/.*\/.*\//;
 
     if (url && mixcloudRegExp.test(url)) {
-      const src = `https://www.mixcloud.com/widget/iframe/?embed_type=widget_standard&amp;feed=${encodeURIComponent(url)}&amp;hide_cover=1&amp;hide_tracklist=1&amp;replace=0`;
+      const src = `https://www.mixcloud.com/widget/iframe/?hide_cover=1&light=1&hide_artwork=1&feed=${encodeURIComponent(url)}`;
       const hasListItem = this.hasBlock('list-item');
       this.editor.command(addIframe, 'audio', src, hasListItem);
     }
