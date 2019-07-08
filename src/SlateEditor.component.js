@@ -202,8 +202,10 @@ class SlateEditor extends React.Component {
    * On change handler for slate editor, save the new `value`.
    */
   onChange = ({ value, operations }) => {
+    console.log('onChange:|' + value + '|');
     this.setState({ value });
     if (this.willChangeContent(operations)) {
+      console.log('debounceOnChange');
       this.debounceOnChange(value);
     }
   }

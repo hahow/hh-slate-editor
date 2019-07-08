@@ -7,8 +7,9 @@
   "dependencies": {
     "hh-slate-editor": "link:..",
     "prop-types": "^15.6.2",
-    "react": "^16.4.1",
-    "react-dom": "^16.4.1",
+    "react": "^16.8.6",
+    "react-beautiful-dnd": "^11.0.4",
+    "react-dom": "^16.8.6",
     "react-scripts": "^1.1.4",
     "styled-components": "2.0.0"
   },
