@@ -52,7 +52,7 @@ class Iframe extends React.Component {
     } else if (type === 'audio') {
       return (
         <iframe
-          title="video"
+          title="audio"
           type="text/html"
           src={src}
           frameBorder="0"

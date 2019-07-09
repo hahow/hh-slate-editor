@@ -49,5 +49,14 @@ export const editorJoiSchema = {
       }
     }
     return false;
+  },
+  soundCloudUrl: (input) => {
+    if (input && typeof input === 'string') {
+      const regex = /(https:)?\/\/soundcloud\.com\/.*\/.*/;
+      if (regex.test(input)) {
+        return true;
+      }
+    }
+    return false;
   }
 };

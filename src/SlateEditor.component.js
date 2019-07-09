@@ -450,6 +450,14 @@ class SlateEditor extends React.Component {
     });
   }
 
+  onClickSoundCloud = (event) => {
+    event.preventDefault();
+    this.setState({
+      currentOpenDialog: 'soundcloud',
+      dialogValue: '',
+    });
+  }
+
   onInsertTab = (event) => {
     event.preventDefault();
     this.editor.insertText('    ');
@@ -583,6 +591,16 @@ class SlateEditor extends React.Component {
 
     if (url && mixcloudRegExp.test(url)) {
       const src = `https://www.mixcloud.com/widget/iframe/?hide_cover=1&light=1&hide_artwork=1&feed=${encodeURIComponent(url)}`;
+      const hasListItem = this.hasBlock('list-item');
+      this.editor.command(addIframe, 'audio', src, hasListItem);
+    }
+  }
+
+  insertSoundCloud = (url) => {
+    const soundCloudRegExp = /(https:)?\/\/soundcloud\.com\/.*\/.*/;
+
+    if (url && soundCloudRegExp.test(url)) {
+      const src = `https://w.soundcloud.com/player/?url=${encodeURIComponent(url)}&color=%23ff5500&auto_play=false&hide_related=true&show_comments=false&show_user=false&show_reposts=false&show_teaser=false`;
       const hasListItem = this.hasBlock('list-item');
       this.editor.command(addIframe, 'audio', src, hasListItem);
     }
@@ -922,6 +940,7 @@ class SlateEditor extends React.Component {
           {this.renderButton(this.onClickYoutube, <FontAwesome name="youtube-play" />, 'Youtube', 'youtube-button')}
           {this.renderButton(this.onClickVimeo, <FontAwesome name="vimeo-square" />, 'Vimeo', 'vimeo-button')}
           {this.renderButton(this.onClickMixCloud, <FontAwesome name="mixcloud" />, 'Mixcloud', 'mixcloud-button')}
+          {this.renderButton(this.onClickSoundCloud, <FontAwesome name="soundcloud" />, 'Soundcloud', 'soundcloud-button')}
         </div>
       </div>
       {this.renderFullScreenButton()}
@@ -1022,6 +1041,22 @@ class SlateEditor extends React.Component {
             onClose={onClose}
             onSubmit={() => {
               this.insertMixCloud(this.state.dialogValue);
+              onClose();
+            }}
+          />
+        );
+      case 'soundcloud':
+        return (
+          <InputDialog
+            title="請輸入 SoundCloud 網址"
+            text="範例：https://www.soundcloud.com/ooo/xxx"
+            value={this.state.dialogValue}
+            isOpen
+            validate={editorJoiSchema.soundCloudUrl}
+            onChange={onChange}
+            onClose={onClose}
+            onSubmit={() => {
+              this.insertSoundCloud(this.state.dialogValue);
               onClose();
             }}
           />

@@ -28,9 +28,10 @@ const getIframeType = (src) => {
   const youtubePrefix = '//www.youtube.com/embed/';
   const vimeoPrefix = '//player.vimeo.com/video/';
   const mixCloudPrefix = 'https://www.mixcloud.com/widget/iframe/';
+  const soundCloudPrefix = 'https://w.soundcloud.com/player/';
   if (src.indexOf(youtubePrefix) >= 0 || src.indexOf(vimeoPrefix) >= 0) {
     return 'video';
-  } else if (src.indexOf(mixCloudPrefix) === 0) {
+  } else if (src.indexOf(mixCloudPrefix) === 0 || src.indexOf(soundCloudPrefix) === 0) {
     return 'audio';
   }
   // eslint-disable-next-line no-console
