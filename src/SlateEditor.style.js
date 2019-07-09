@@ -31,7 +31,7 @@ const StyledSlateEditor = StyledRichTextView.extend`
   }
 
   .toolbar-menu {
-    padding: 5px 24px 0;
+    padding: 5px 10px 0;
     margin: 0;
     background-color: #f5f5f5;
     border-color: #ddd;
@@ -74,11 +74,14 @@ const StyledSlateEditor = StyledRichTextView.extend`
     .button-group + .button-group {
       margin-right: 12px;
     }
+    .button-group:last-of-type {
+      margin-right: 45px;
+    }
   }
 
   .toolbar-menu .full-screen-btn {
     position: absolute;
-    right: 24px;
+    right: 10px;
     top: 5px;
   }
 
