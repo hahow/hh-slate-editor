@@ -600,7 +600,7 @@ class SlateEditor extends React.Component {
     const soundCloudRegExp = /(https:)?\/\/soundcloud\.com\/.*\/.*/;
 
     if (url && soundCloudRegExp.test(url)) {
-      const src = `https://w.soundcloud.com/player/?url=${encodeURIComponent(url)}&color=%23ff5500&auto_play=false&hide_related=true&show_comments=false&show_user=false&show_reposts=false&show_teaser=false`;
+      const src = `https://w.soundcloud.com/player/?color=%23ff5500&auto_play=false&hide_related=true&show_comments=false&show_user=false&show_reposts=false&show_teaser=false&url=${encodeURIComponent(url)}`;
       const hasListItem = this.hasBlock('list-item');
       this.editor.command(addIframe, 'audio', src, hasListItem);
     }
