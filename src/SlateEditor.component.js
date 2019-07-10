@@ -1049,7 +1049,7 @@ class SlateEditor extends React.Component {
         return (
           <InputDialog
             title="請輸入 SoundCloud 網址"
-            text="範例：https://www.soundcloud.com/ooo/xxx"
+            text="範例：https://soundcloud.com/ooo/xxx"
             value={this.state.dialogValue}
             isOpen
             validate={editorJoiSchema.soundCloudUrl}
