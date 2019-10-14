@@ -621,6 +621,16 @@ class SlateEditor extends React.Component {
     }
   }
 
+  /**
+   * 這個 function 主要用於從 editor 外部插入內容使用
+   *
+   * @param {string} html html string to be inserted
+   */
+  insertFragment = (html) => {
+    const { document } = htmlSerializer.deserialize(html);
+    this.editor.insertFragment(document);
+  }
+
   editLink = (nodeKey, href, openInNewWindow) => {
     this.editor.command(setLinkByKey, nodeKey, href, openInNewWindow);
   }
