@@ -1,7 +1,6 @@
 /**
- * Warning: This is not a full-functioned editor. There is no image uploading
- *  function. Please do not import this component directly.
- * Please import SlateEditor.container in containers folder
+ * Warning: This is NOT a full-functioned editor. There is no image uploading
+ *  function. Please give uploadImage props when you use it.
  */
 
 import PropTypes from 'prop-types';
@@ -34,6 +33,12 @@ const plugins = [
   SoftBreak({ shift: true, onlyIn: ['pre', 'block-quote'] }),
 ];
 
+/**
+ * 把目前選取的字，包成 type = link 的 node (link node)
+ * @param {object} editor
+ * @param {string} href 超連結
+ * @param {boolean} openInNewWindow 是否要開新視窗
+ */
 function wrapLink(editor, href, openInNewWindow) {
   const data = { href };
   if (openInNewWindow) {
@@ -47,10 +52,21 @@ function wrapLink(editor, href, openInNewWindow) {
   editor.moveToEnd();
 }
 
+/**
+ * 解除掉 link node 的 type
+ * @param {object}} editor
+ */
 function unwrapLink(editor) {
   editor.unwrapInline('link');
 }
 
+/**
+ * 修改 link node 的超連結
+ * @param {object} editor
+ * @param {*} nodeKey slate editor 針對每一個 node 產生的 unique key
+ * @param {string} href 超連結
+ * @param {boolean} openInNewWindow 是否要開新視窗
+ */
 function setLinkByKey(editor, nodeKey, href, openInNewWindow) {
   const data = { href };
   if (openInNewWindow) { data.target = '_blank'; }
@@ -59,6 +75,13 @@ function setLinkByKey(editor, nodeKey, href, openInNewWindow) {
   });
 }
 
+/**
+ * 修改 image node 的 alt
+ * @param {object} editor
+ * @param {*} nodeKey slate editor 針對每一個 node 產生的 unique key
+ * @param {string} alt image 的 alt attribute
+ * @param {string} src src image 的 src
+ */
 function setImageAltByKey(editor, nodeKey, alt, src) {
   const data = { alt, src };
   editor.setNodeByKey(nodeKey, {
@@ -66,6 +89,13 @@ function setImageAltByKey(editor, nodeKey, alt, src) {
   });
 }
 
+/**
+ * 插入一個 iframe 的 node
+ * @param {object} editor
+ * @param {string} type
+ * @param {string} href iframe 的網址
+ * @param {boolean} hasListItem 假設原本的位置有 list-item ，那麼要先 unwrap list-item node，才不會出錯
+ */
 function addIframe(editor, type, href, hasListItem = false) {
   // if the position for iframe has list-item, then unwrap it first
   if (hasListItem) {
@@ -83,6 +113,12 @@ function addIframe(editor, type, href, hasListItem = false) {
   });
 }
 
+/**
+ * 插入一個新的 image node
+ * @param {object} editor
+ * @param {string} src image 的 source
+ * @param {boolean} hasListItem 假設原本的位置有 list-item ，那麼要先 unwrap list-item node，才不會出錯
+ */
 function insertImage(editor, src, hasListItem = false) {
   // if the position for image has list-item, then unwrap it first
   if (hasListItem) {
@@ -100,6 +136,7 @@ function insertImage(editor, src, hasListItem = false) {
   });
 }
 
+/* 這三種 node 要把 isVoid 設成 true，否則在游標移動到這些 node，打字的時候，會爆炸 */
 const schema = {
   blocks: {
     image: { isVoid: true },
@@ -124,8 +161,19 @@ class SlateEditor extends React.Component {
     uploadImage: PropTypes.func,
     /** to show some warning message while using editor */
     onWarning: PropTypes.func,
+    /**
+     * 當 normalizeValue 為 true，從 props.value 傳進來的 html
+     * string 會先經過 htmlNormalization.js 的處理，以盡可能符合
+     * slate 的 default document schema，避免掉資料或跑版。
+     */
     normalizeValue: PropTypes.bool,
+    /**
+     * 當 normalizePastedValue 為 true，從 onPaste 傳進來的 html
+     * string 會先經過 htmlNormalization.js 的處理，以盡可能符合
+     * slate 的 default document schema，避免掉資料或跑版。
+     */
     normalizePastedValue: PropTypes.bool,
+    /** 錯誤訊息的訊息 */
     errorMessage: PropTypes.string,
     className: PropTypes.string,
   };
@@ -159,12 +207,21 @@ class SlateEditor extends React.Component {
       initialValue = htmlSerializer.deserialize(props.value);
     }
     this.state = {
-      /** the data model maintained by Slate Editor, not html string */
+      /**
+       * 這邊的 state.value 不是 props 傳進來的 value
+       * props.value 是 html string，這裡的 state.value 是由 slate
+       * 維護的 document model
+       */
       value: initialValue,
-      /** the serialized value (html string) from value or props.value */
+      /**
+       * 從 state.value 這個 slate 自訂的規格，serialize 成的 html string
+       */
       serializedValue: props.value,
+      // 是否為全螢幕模式
       fullScreenMode: false,
+      // 目前打開的 dialog 的名字
       currentOpenDialog: null,
+      // 以下四個都是儲存 dialog 裡面值的變數用
       dialogValue: '',
       dialogUrl: '',
       dialogText: '',
@@ -222,6 +279,8 @@ class SlateEditor extends React.Component {
 
   /**
    * Handle numbered-list, bulleted-list button click event
+   * 這個 handler 嘗試要把一段選取的內容，變成 list，或者解除 list
+   * 包含了整個 editor 套件最複雜的 node 操作，裡面有加上註解
    *
    * @param {Event} event
    * @param {String} type - custom name of node type defined by ourselves,
@@ -244,21 +303,22 @@ class SlateEditor extends React.Component {
     ));
 
     /*
-      假設選取的範圍包含 void block (image, video, audio)，或 non-list block
-      (heading-four, block-quote, pre) 情況會非常複雜，不好處理，因此目前僅會
-      unwrap 原本的 list。
-      e.g.
+      假設選取的範圍包含了 void block (image, video, audio)，或 non-list
+      block (heading-four, block-quote, pre) 結構情況會非常複雜，不好處理。
+      因此目前僅會 unwrap 原本指定的種類的 list。
+
+      飯粒一（橫著看）
         選取範圍
-        <ol>                                  <p>123</p>
-          <li>123</li>  click numbered-list   <p>456</p>
-          <li>456</li>  ===================>  <img />
+        <ol>                                         <p>123</p>
+          <li>123</li>     點擊 numbered-list 按鈕    <p>456</p>
+          <li>456</li>  ==========================>  <img />
         </ol>
         <img />
       e.g.
         選取範圍
         <ol>
-          <li>123</li>  click bulleted-list
-          <li>456</li>  ===================> 不處理
+          <li>123</li>    點擊 bulleted-list 按鈕
+          <li>456</li>  ==========================> 不處理
         </ol>
         <img />
     */
@@ -282,13 +342,13 @@ class SlateEditor extends React.Component {
     } else {
       /**
        *  假設不包含 void block 以及 non-list block，情況會簡單一點：
-       *  if (如果原本小孩包含 list item <li>，以及最靠近的 parent 有原本的 type) {
+       *  if (如果原本小孩包含 list item <li>，以及最靠近的 parent 有指定的 list type) {
        *    取消原本的 type，轉成 paragraph
        *  }
-       *  else if (如果原本小孩包含 list item <li>，但最靠近的 parent 沒有 type) {
-       *    那就把原本的取消，包上 type
+       *  else if (如果原本小孩包含 list item <li>，但最靠近的 parent 沒有指定的 list type) {
+       *    那就把原本的取消，包上指定的 list type
        * }
-       *  else { 剩下的情況，就包上 type }
+       *  else { 剩下的情況，就包上指定的 list type }
        */
       // eslint-disable-next-line no-lonely-if
       if (hasListItem && hasType) {
@@ -309,7 +369,7 @@ class SlateEditor extends React.Component {
   }
 
   /**
-   * When a non-list block button is clicked, toggle the block type.
+   * 專門給 block type（但不是 list type）的按鈕的 handler，舉實例是 paragraph, block-qoute
    *
    * @param {Event} event
    * @param {String} type - custom name of node type defined by ourselves,
@@ -359,8 +419,8 @@ class SlateEditor extends React.Component {
   }
 
   /**
-   * When clicking a link, if the selection has a link in it, remove the link.
-   * Otherwise, add a new link with an href and text.
+   * 點擊超連結按鈕的 handler
+   * 假設選取的範圍有超連結，那就會移除掉掉超連結，不然就會跳出 Dialog，給使用者新增超連結
    *
    * @param {Event} event
    */
@@ -418,6 +478,9 @@ class SlateEditor extends React.Component {
     }
   }
 
+  /**
+   * 點擊 Giphy 按鈕的 handler
+   */
   onClickGiphy = (event) => {
     event.preventDefault();
     this.setState({
@@ -458,15 +521,24 @@ class SlateEditor extends React.Component {
     });
   }
 
+  /**
+   * 按下 tab 鍵，會插入四個空白
+   */
   onInsertTab = (event) => {
     event.preventDefault();
     this.editor.insertText('    ');
   }
 
+  /**
+   * 按下全螢幕編輯的按鈕的 handler
+   */
   onClickFullScreen = () => {
     this.setState({ fullScreenMode: !this.state.fullScreenMode });
   }
 
+  /**
+   * 按下清除格鍵的 handler
+   */
   onClickClearFormat = (event) => {
     event.preventDefault();
     const editor = this.editor;
@@ -514,7 +586,7 @@ class SlateEditor extends React.Component {
 
   /**
    * The event handler while pasting content to slate editor
-   *
+   * 貼近來的內容，會是 html string
    * @param {Event} event
    * @param {Object} editor - {@link https://docs.slatejs.org/slate-core/editor}
    */
@@ -530,6 +602,10 @@ class SlateEditor extends React.Component {
     return true;
   }
 
+  /**
+   * 為了避免太高頻率的做 serialization （document model -> html string）
+   * 導致效能太差，這裡有特別做 debounce
+   */
   debounceOnChange = debounce((value) => {
     let serializedValue = this.serializeValue(value);
     // for empty content, it will emit empty string (for back-end)
@@ -551,6 +627,7 @@ class SlateEditor extends React.Component {
    */
   willChangeContent = operations => operations.some(op => op.type !== 'set_selection');
 
+  /** 插入 Giphy 圖檔 */
   insertGiphy = (url) => {
     const giphyRegExp = /\/\/giphy\.com\/gifs\/(\w*?-)*?(\w*?)\/html5$/;
     if (url && giphyRegExp.test(url)) {
@@ -562,6 +639,7 @@ class SlateEditor extends React.Component {
     }
   }
 
+  /** 插入 Youtube iframe */
   insertYoutube = (url) => {
     const ytRegExp = /^(?:https?:\/\/)?(?:www\.)?(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=))((\w|-){11})(?:\S+)?$/;
 
@@ -574,6 +652,7 @@ class SlateEditor extends React.Component {
     }
   }
 
+  /** 插入 Vimeo iframe */
   insertVimeo = (url) => {
     const vimRegExp = /\/\/(player.)?vimeo.com\/([a-z]*\/)*([0-9]{6,11})[?]?.*/;
 
@@ -586,6 +665,7 @@ class SlateEditor extends React.Component {
     }
   }
 
+  /** 插入 Mixcloud iframe */
   insertMixCloud = (url) => {
     const mixcloudRegExp = /(http:|https:)?\/\/www\.mixcloud\.com\/.*\/.*\//;
 
@@ -596,6 +676,7 @@ class SlateEditor extends React.Component {
     }
   }
 
+  /** 插入 Soundcloud iframe */
   insertSoundCloud = (url) => {
     const soundCloudRegExp = /(https:)?\/\/soundcloud\.com\/.*\/.*/;
 
@@ -606,6 +687,7 @@ class SlateEditor extends React.Component {
     }
   }
 
+  /** 插入一段超連結文字 */
   insertLink = (href, text, openInNewWindow) => {
     const editor = this.editor;
     if (href) {
@@ -631,10 +713,12 @@ class SlateEditor extends React.Component {
     this.editor.insertFragment(document);
   }
 
+  /** 修改超連結內容 */
   editLink = (nodeKey, href, openInNewWindow) => {
     this.editor.command(setLinkByKey, nodeKey, href, openInNewWindow);
   }
 
+  /** 修改 Image alt */
   editImageAlt = (nodeKey, alt, src) => {
     this.editor.command(setImageAltByKey, nodeKey, alt, src);
   }
@@ -703,7 +787,7 @@ class SlateEditor extends React.Component {
 
   /**
    * Render block and inline nodes.
-   *
+   * 這個 function 很重要，會把 slate 自己 maintain 的資料格式，render 成 html node
    * @param {Object} nodeProps
    * @param {Object} nodeProps.attributes - {@link https://docs.slatejs.org/slate-react/custom-nodes#attributes}
    * @param {Object} nodeProps.children - {@link https://docs.slatejs.org/slate-react/custom-nodes#children}
@@ -751,7 +835,7 @@ class SlateEditor extends React.Component {
 
   /**
    * Render mark
-   *
+   * 把 mark render 出來，包含粗體、斜體
    * @param {Object} nodeProps
    * @param {Object} nodeProps.children - {@link https://docs.slatejs.org/slate-react/custom-nodes#children}
    * @param {Mark} nodeProps.mark - {@link https://docs.slatejs.org/slate-core/mark}
@@ -924,6 +1008,9 @@ class SlateEditor extends React.Component {
     </Tooltip>
   );
 
+  /**
+   * render 編輯器上方的工具列
+   */
   renderToolbar = () => (
     <div className="toolbar-menu">
       <div className="button-group">
