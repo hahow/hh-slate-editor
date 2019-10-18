@@ -40,9 +40,12 @@ const getIframeType = (src) => {
 };
 
 /**
- * The serialization/deserialization rule to/from html.
- * serialize: convert slate document model object to string
- * deserialize: convert string to slate document mode object
+ * 這個是使用 Slate Editor，幾乎必備的邏輯。提供 slate 自已 maintain
+ * 的 document model 跟 html string 之間轉換。每一種 node 都要有對
+ * 應的 serialize & deserialize 函數
+ *
+ * serialize: convert slate document model object to html string
+ * deserialize: convert html string to slate document mode object
  */
 const rules = [
   {
