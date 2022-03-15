@@ -81,9 +81,11 @@ function setLinkByKey(editor, nodeKey, href, openInNewWindow) {
  * @param {*} nodeKey slate editor 針對每一個 node 產生的 unique key
  * @param {string} alt image 的 alt attribute
  * @param {string} src src image 的 src
+ * @param {string} href 超連結
+ * @param {boolean} openInNewWindow 是否要開新視窗
  */
-function setImageAltByKey(editor, nodeKey, alt, src) {
-  const data = { alt, src };
+function setImageAltByKey(editor, nodeKey, alt, src, href, openInNewWindow) {
+  const data = { alt, src, href, openInNewWindow };
   editor.setNodeByKey(nodeKey, {
     data,
   });
@@ -719,8 +721,8 @@ class SlateEditor extends React.Component {
   }
 
   /** 修改 Image alt */
-  editImageAlt = (nodeKey, alt, src) => {
-    this.editor.command(setImageAltByKey, nodeKey, alt, src);
+  editImageAlt = (nodeKey, alt, src, href, openInNewWindow) => {
+    this.editor.command(setImageAltByKey, nodeKey, alt, src, href, openInNewWindow);
   }
 
   /**
@@ -1210,20 +1212,28 @@ class SlateEditor extends React.Component {
         );
       case 'edit-image-alt':
         return (
-          <InputDialog
-            title="請輸入圖片說明文字"
-            value={this.state.dialogValue}
+          <LinkInputDialog
             isOpen
-            validate={null}
-            onChange={onChange}
+            showTextInput={true}
+            title="編輯圖片"
+            url={this.state.dialogUrl}
+            text={this.state.dialogText}
+            openInNewWindow={this.state.openInNewWindow}
+            urlValidate={(input) => !input || editorJoiSchema.url(input)}
+            textValidate={() => true}
+            onChangeUrl={onChangeUrl}
+            onChangeText={onChangeText}
+            onChangeOpenInNewWindow={onChangeOpenInNewWindow}
             onClose={onClose}
             onSubmit={() => {
               const node = this.state.value.document.getNode(this.state.editNodeKey);
               const src = node ? node.data.get('src') : '';
               this.editImageAlt(
                 this.state.editNodeKey,
-                this.state.dialogValue,
+                this.state.dialogText,
                 src,
+                this.state.dialogUrl,
+                this.state.openInNewWindow,
               );
               onClose();
             }}

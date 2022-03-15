@@ -11,8 +11,8 @@ class LinkInputDialog extends Component {
     showTextInput: PropTypes.bool.isRequired,
     title: PropTypes.string.isRequired,
     introText: PropTypes.string,
-    url: PropTypes.string.isRequired,
-    text: PropTypes.string.isRequired,
+    url: PropTypes.string,
+    text: PropTypes.string,
     openInNewWindow: PropTypes.bool.isRequired,
     urlValidate: PropTypes.func.isRequired,
     textValidate: PropTypes.func.isRequired,
@@ -30,8 +30,8 @@ class LinkInputDialog extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      urlIsValid: props.url ? props.urlValidate(props.url) : false,
-      textIsValid: props.text ? props.textValidate(props.text) : false,
+      urlIsValid: props.urlValidate(props.url),
+      textIsValid: props.textValidate(props.text),
     };
   }
 
