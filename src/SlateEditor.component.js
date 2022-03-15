@@ -85,7 +85,8 @@ function setLinkByKey(editor, nodeKey, href, openInNewWindow) {
  * @param {boolean} openInNewWindow 是否要開新視窗
  */
 function setImageAltByKey(editor, nodeKey, alt, src, href, openInNewWindow) {
-  const data = { alt, src, href, openInNewWindow };
+  const data = { alt, src, href };
+  if (openInNewWindow) { data.target = '_blank'; }
   editor.setNodeByKey(nodeKey, {
     data,
   });
@@ -467,8 +468,9 @@ class SlateEditor extends React.Component {
     const node = this.state.value.document.getNode(nodeKey);
     this.setState({
       currentOpenDialog: 'edit-image-alt',
-      showTextInput: false,
-      dialogValue: node.data.get('alt'),
+      showTextInput: true,
+      dialogText: node.data.get('alt'),
+      dialogUrl: node.data.get('href'),
       editNodeKey: nodeKey,
     });
   }
@@ -1214,7 +1216,7 @@ class SlateEditor extends React.Component {
         return (
           <LinkInputDialog
             isOpen
-            showTextInput={true}
+            showTextInput={this.state.showTextInput}
             title="編輯圖片"
             url={this.state.dialogUrl}
             text={this.state.dialogText}

@@ -74,32 +74,20 @@ const StyledImage = styled.div`
 class InputEditDialog extends React.Component {
   static propTypes = {
     menuRef: PropTypes.func.isRequired,
-    value: PropTypes.string,
+    alt: PropTypes.string,
+    href: PropTypes.string,
     onOpenEditDialog: PropTypes.func.isRequired,
   };
 
-  constructor(props) {
-    super(props);
-    this.state = {
-      value: props.value || '',
-    }
-  }
-
-  componentDidUpdate(prevProps) {
-    if (prevProps.value !== this.props.value) {
-      this.setState({ value: this.props.value })
-    }
-  }
-
   render() {
-    const { menuRef, onOpenEditDialog } = this.props;
-    const { value } = this.state;
+    const { menuRef, onOpenEditDialog, alt, href } = this.props;
     return (
       <StyledInputEditDialog innerRef={menuRef} contentEditable={false}>
         <div className="menu-container">
           <div className="arrow-top" />
           <div>
-            圖片描述：{value}
+            {href && (<React.Fragment>連結：<a href={href} target="_blank">{href}</a><br /></React.Fragment>)}
+            圖片描述：{alt}
             <button
               onMouseDown={onOpenEditDialog}
               className="menu-button"
@@ -117,7 +105,6 @@ class Image extends React.Component {
     attributes: PropTypes.object.isRequired,
     children: PropTypes.oneOfType([PropTypes.element, PropTypes.array]).isRequired,
     isSelected: PropTypes.bool.isRequired,
-    onChangeImgAlt: PropTypes.func.isRequired,
   }
 
   constructor(props) {
@@ -157,6 +144,8 @@ class Image extends React.Component {
     const { node, attributes, onOpenEditDialog } = this.props;
     const src = node.data.get('src');
     const alt = node.data.get('alt');
+    const href = node.data.get('href');
+    const target = node.data.get('target');
     return (
       <StyledImage>
         <img
@@ -167,7 +156,8 @@ class Image extends React.Component {
         />
         <InputEditDialog
           menuRef={this.saveMenuRef}
-          value={alt}
+          alt={alt}
+          href={href}
           onOpenEditDialog={() => {
             if (onOpenEditDialog && node.key) {
               this.closeMenu();
