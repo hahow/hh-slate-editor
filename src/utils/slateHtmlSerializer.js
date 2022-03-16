@@ -40,6 +40,27 @@ const getIframeType = (src) => {
 };
 
 /**
+ * Pack node info into an object
+ * @param {?HTMLElement} node The node to parse
+ * @return {{ tagName: string, [attrName: string]: string }} An object of tag name and attr values of the node.
+ */
+const getNodeInfo = (node) => {
+  const tagName =  node.tagName && node.tagName.toLowerCase();
+  switch (tagName) {
+    case 'img':{
+      return {
+        tagName,
+        src: node.getAttribute('src'),
+        alt: node.getAttribute('alt')
+      };
+    }
+    default: {
+      return { tagName };
+    }
+  }
+}
+
+/**
  * 這個是使用 Slate Editor，幾乎必備的邏輯。提供 slate 自已 maintain
  * 的 document model 跟 html string 之間轉換。每一種 node 都要有對
  * 應的 serialize & deserialize 函數
@@ -136,7 +157,15 @@ const rules = [
           const href = el.getAttribute('href');
           const target = el.getAttribute('target');
           const data = { href, target };
-          return {
+          const { tagName, ...attr } = getNodeInfo(el.childNodes[0]);
+
+          // 為了 linkedImg 做的 patch，假如子元素是圖片則作為圖片處理
+          return tagName === 'img' ? {
+            object: 'block',
+            type: 'image',
+            data: { href, target, ...attr },
+            isVoid: true,
+          } : {
             object: 'inline',
             type,
             nodes: next(el.childNodes),

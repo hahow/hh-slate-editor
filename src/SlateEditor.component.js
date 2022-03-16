@@ -471,6 +471,7 @@ class SlateEditor extends React.Component {
       showTextInput: true,
       dialogText: node.data.get('alt'),
       dialogUrl: node.data.get('href'),
+      openInNewWindow: node.data.get('target') === '_blank',
       editNodeKey: nodeKey,
     });
   }
