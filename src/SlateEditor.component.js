@@ -76,7 +76,7 @@ function setLinkByKey(editor, nodeKey, href, openInNewWindow) {
 }
 
 /**
- * 修改 image node 的 alt
+ * 修改 image node 的 alt 和連結
  * @param {object} editor
  * @param {*} nodeKey slate editor 針對每一個 node 產生的 unique key
  * @param {string} alt image 的 alt attribute
@@ -84,7 +84,7 @@ function setLinkByKey(editor, nodeKey, href, openInNewWindow) {
  * @param {string} href 超連結
  * @param {boolean} openInNewWindow 是否要開新視窗
  */
-function setImageAltByKey(editor, nodeKey, alt, src, href, openInNewWindow) {
+function setImageInfoByKey(editor, nodeKey, alt, src, href, openInNewWindow) {
   const data = { alt, src, href };
   if (openInNewWindow) { data.target = '_blank'; }
   editor.setNodeByKey(nodeKey, {
@@ -725,7 +725,7 @@ class SlateEditor extends React.Component {
 
   /** 修改 Image alt */
   editImageAlt = (nodeKey, alt, src, href, openInNewWindow) => {
-    this.editor.command(setImageAltByKey, nodeKey, alt, src, href, openInNewWindow);
+    this.editor.command(setImageInfoByKey, nodeKey, alt, src, href, openInNewWindow);
   }
 
   /**
