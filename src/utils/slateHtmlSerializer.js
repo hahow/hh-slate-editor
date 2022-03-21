@@ -40,24 +40,19 @@ const getIframeType = (src) => {
 };
 
 /**
- * Pack node info into an object
- * @param {?HTMLElement} node The node to parse
- * @return {{ tagName: string, [attrName: string]: string }} An object of tag name and attr values of the node.
+ * Return an object of target attribute values, and will return all attribute values of the node if input is empty.
+ * @param {Element} node The html node
+ * @param {...?string} attrs Attribute names
+ * @return {{ [attrName: string]: string }} An object of attr values.
  */
-const getNodeInfo = (node) => {
-  const tagName =  node.tagName && node.tagName.toLowerCase();
-  switch (tagName) {
-    case 'img':{
-      return {
-        tagName,
-        src: node.getAttribute('src'),
-        alt: node.getAttribute('alt')
-      };
-    }
-    default: {
-      return { tagName };
-    }
-  }
+const getNodeAttrs = function(node, ...attrs){
+  return (attrs.length ? attrs : node.getAttributeNames()).reduce((obj, attr) => {
+    let name = attr;
+    if(attr === 'class') name = 'className';
+
+    obj[name] = node.getAttribute(attr);
+    return obj;
+  }, {})
 }
 
 /**
@@ -77,7 +72,7 @@ const rules = [
       switch (type) {
         case 'iframe': {
           // <iframe> could have 'video' or 'audio' type node, we need to distinguish them by src
-          const src = el.getAttribute('src');
+          const { src } = getNodeAttrs(el, 'src');
           const newType = getIframeType(src);
           if (!newType) { return undefined; }
           return {
@@ -89,23 +84,20 @@ const rules = [
           };
         }
         case 'image': {
-          const src = el.getAttribute('src');
-          const alt = el.getAttribute('alt');
           return {
             object: 'block',
             type,
             nodes: next(el.childNodes),
-            data: { src, alt },
+            data: getNodeAttrs(el, 'src', 'alt'),
             isVoid: true,
           };
         }
         case 'test': {
-          const className = el.getAttribute('class');
           return {
             object: 'block',
             type,
             nodes: next(el.childNodes),
-            data: { className },
+            data: getNodeAttrs(el, 'class'),
           };
         }
         default: return {
@@ -154,22 +146,20 @@ const rules = [
       if (!type) return undefined;
       switch (type) {
         case 'link': {
-          const href = el.getAttribute('href');
-          const target = el.getAttribute('target');
-          const data = { href, target };
-          const { tagName, ...attr } = getNodeInfo(el.childNodes[0]);
+          const { href, target } = getNodeAttrs(el, 'href', 'target');
+          const child = el.childNodes[0]
 
           // 為了 linkedImg 做的 patch，假如子元素是圖片則作為圖片處理
-          return tagName === 'img' ? {
+          return child.tagName === 'IMG' ? {
             object: 'block',
             type: 'image',
-            data: { href, target, ...attr },
+            data: { href, target, ...getNodeAttrs(child, 'src', 'alt') },
             isVoid: true,
           } : {
             object: 'inline',
             type,
             nodes: next(el.childNodes),
-            data,
+            data: { href, target },
           };
         }
         default: return null;
