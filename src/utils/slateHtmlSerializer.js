@@ -121,7 +121,8 @@ const rules = [
           const alt = object.data.get('alt');
           const href = object.data.get('href');
           const target = object.data.get('target');
-          return href ? <a href={href} target={target}><img src={src} alt={alt} /></a> : <img src={src} alt={alt} />;
+          const rel = target && 'noopener noreferrer';
+          return href ? <a href={href} target={target} rel={rel}><img src={src} alt={alt} /></a> : <img src={src} alt={alt} />;
         }
         case 'pre': return <pre>{children}</pre>;
         // while serialization, these 2 types sharing <iframe> tag
@@ -171,8 +172,9 @@ const rules = [
         case 'link': {
           const href = object.data.get('href');
           const target = object.data.get('target');
+          const rel = target && 'noopener noreferrer';
           if (target) {
-            return <a href={href} target={target}>{children}</a>;
+            return <a href={href} target={target} rel={rel}>{children}</a>;
           }
           return <a href={href}>{children}</a>;
         }
