@@ -42,8 +42,8 @@ const getIframeType = (src) => {
 /**
  * Return an object of target attribute values, and will return all attribute values of the node if input is empty.
  * @param {Element} node The html node
- * @param {...?string} attrs Attribute names
- * @return {{ [attrName: string]: string }} An object of attr values.
+ * @param {...string} attrs Attribute names
+ * @returns {Object.<string, string>} An object of attr values.
  */
 const getNodeAttrs = function(node, ...attrs){
   return (attrs.length ? attrs : node.getAttributeNames()).reduce((obj, attr) => {
