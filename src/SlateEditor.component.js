@@ -723,8 +723,8 @@ class SlateEditor extends React.Component {
     this.editor.command(setLinkByKey, nodeKey, href, openInNewWindow);
   }
 
-  /** 修改 Image alt */
-  editImageAlt = (nodeKey, alt, src, href, openInNewWindow) => {
+  /** 修改 Image alt 和連結 */
+  editImageInfo = (nodeKey, alt, src, href, openInNewWindow) => {
     this.editor.command(setImageInfoByKey, nodeKey, alt, src, href, openInNewWindow);
   }
 

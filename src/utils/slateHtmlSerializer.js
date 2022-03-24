@@ -39,6 +39,14 @@ const getIframeType = (src) => {
   return null;
 };
 
+/** 
+ * An object of HTML - React attribute names mapping
+ * @const {Object.<string, string>} 
+ */
+const attrNameMap = {
+  'class': 'className'
+};
+
 /**
  * Return an object of target attribute values, and will return all attribute values of the node if input is empty.
  * @param {Element} node The html node
@@ -46,12 +54,10 @@ const getIframeType = (src) => {
  * @returns {Object.<string, string>} An object of attr values.
  */
 const getNodeAttrs = function(node, ...attrs){
-  return (attrs.length ? attrs : node.getAttributeNames()).reduce((obj, attr) => {
-    let name = attr;
-    if(attr === 'class') name = 'className';
-
-    obj[name] = node.getAttribute(attr);
-    return obj;
+  const names = attrs.length ? attrs : node.getAttributeNames()
+  return names.reduce((attrObj, name) => {
+    attrObj[attrNameMap[name] || name] = node.getAttribute(name);
+    return attrObj;
   }, {})
 }
 
