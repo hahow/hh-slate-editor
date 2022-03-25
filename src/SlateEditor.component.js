@@ -1231,7 +1231,7 @@ class SlateEditor extends React.Component {
             onSubmit={() => {
               const node = this.state.value.document.getNode(this.state.editNodeKey);
               const src = node ? node.data.get('src') : '';
-              this.editImageAlt(
+              this.editImageInfo(
                 this.state.editNodeKey,
                 this.state.dialogText,
                 src,
