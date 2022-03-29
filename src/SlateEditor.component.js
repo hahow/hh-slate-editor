@@ -464,10 +464,10 @@ class SlateEditor extends React.Component {
     });
   }
 
-  onOpenImgAltEditDialog = (nodeKey) => {
+  onOpenImgInfoEditDialog = (nodeKey) => {
     const node = this.state.value.document.getNode(nodeKey);
     this.setState({
-      currentOpenDialog: 'edit-image-alt',
+      currentOpenDialog: 'edit-image-info',
       showTextInput: true,
       dialogText: node.data.get('alt'),
       dialogUrl: node.data.get('href'),
@@ -827,7 +827,7 @@ class SlateEditor extends React.Component {
           node={node}
           attributes={attributes}
           isSelected={isSelected}
-          onOpenEditDialog={this.onOpenImgAltEditDialog}
+          onOpenEditDialog={this.onOpenImgInfoEditDialog}
         />;
       }
       case 'test': {
@@ -1213,7 +1213,7 @@ class SlateEditor extends React.Component {
             }}
           />
         );
-      case 'edit-image-alt':
+      case 'edit-image-info':
         return (
           <LinkInputDialog
             isOpen
