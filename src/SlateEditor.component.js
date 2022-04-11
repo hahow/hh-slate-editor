@@ -76,14 +76,17 @@ function setLinkByKey(editor, nodeKey, href, openInNewWindow) {
 }
 
 /**
- * 修改 image node 的 alt
+ * 修改 image node 的 alt 和連結
  * @param {object} editor
  * @param {*} nodeKey slate editor 針對每一個 node 產生的 unique key
  * @param {string} alt image 的 alt attribute
  * @param {string} src src image 的 src
+ * @param {string} href 超連結
+ * @param {boolean} openInNewWindow 是否要開新視窗
  */
-function setImageAltByKey(editor, nodeKey, alt, src) {
-  const data = { alt, src };
+function setImageInfoByKey(editor, nodeKey, alt, src, href, openInNewWindow) {
+  const data = { alt, src, href };
+  if (openInNewWindow) { data.target = '_blank'; }
   editor.setNodeByKey(nodeKey, {
     data,
   });
@@ -461,12 +464,14 @@ class SlateEditor extends React.Component {
     });
   }
 
-  onOpenImgAltEditDialog = (nodeKey) => {
+  onOpenImgInfoEditDialog = (nodeKey) => {
     const node = this.state.value.document.getNode(nodeKey);
     this.setState({
-      currentOpenDialog: 'edit-image-alt',
-      showTextInput: false,
-      dialogValue: node.data.get('alt'),
+      currentOpenDialog: 'edit-image-info',
+      showTextInput: true,
+      dialogText: node.data.get('alt'),
+      dialogUrl: node.data.get('href'),
+      openInNewWindow: node.data.get('target') === '_blank',
       editNodeKey: nodeKey,
     });
   }
@@ -718,9 +723,9 @@ class SlateEditor extends React.Component {
     this.editor.command(setLinkByKey, nodeKey, href, openInNewWindow);
   }
 
-  /** 修改 Image alt */
-  editImageAlt = (nodeKey, alt, src) => {
-    this.editor.command(setImageAltByKey, nodeKey, alt, src);
+  /** 修改 Image alt 和連結 */
+  editImageInfo = (nodeKey, alt, src, href, openInNewWindow) => {
+    this.editor.command(setImageInfoByKey, nodeKey, alt, src, href, openInNewWindow);
   }
 
   /**
@@ -822,7 +827,7 @@ class SlateEditor extends React.Component {
           node={node}
           attributes={attributes}
           isSelected={isSelected}
-          onOpenEditDialog={this.onOpenImgAltEditDialog}
+          onOpenEditDialog={this.onOpenImgInfoEditDialog}
         />;
       }
       case 'test': {
@@ -1208,22 +1213,30 @@ class SlateEditor extends React.Component {
             }}
           />
         );
-      case 'edit-image-alt':
+      case 'edit-image-info':
         return (
-          <InputDialog
-            title="請輸入圖片說明文字"
-            value={this.state.dialogValue}
+          <LinkInputDialog
             isOpen
-            validate={null}
-            onChange={onChange}
+            showTextInput={this.state.showTextInput}
+            title="編輯圖片"
+            url={this.state.dialogUrl}
+            text={this.state.dialogText}
+            openInNewWindow={this.state.openInNewWindow}
+            urlValidate={(input) => !input || editorJoiSchema.url(input)}
+            textValidate={() => true}
+            onChangeUrl={onChangeUrl}
+            onChangeText={onChangeText}
+            onChangeOpenInNewWindow={onChangeOpenInNewWindow}
             onClose={onClose}
             onSubmit={() => {
               const node = this.state.value.document.getNode(this.state.editNodeKey);
               const src = node ? node.data.get('src') : '';
-              this.editImageAlt(
+              this.editImageInfo(
                 this.state.editNodeKey,
-                this.state.dialogValue,
+                this.state.dialogText,
                 src,
+                this.state.dialogUrl,
+                this.state.openInNewWindow,
               );
               onClose();
             }}

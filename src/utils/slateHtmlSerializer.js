@@ -39,6 +39,28 @@ const getIframeType = (src) => {
   return null;
 };
 
+/** 
+ * An object of HTML - React attribute names mapping
+ * @const {Object.<string, string>} 
+ */
+const attrNameMap = {
+  'class': 'className'
+};
+
+/**
+ * Return an object of target attribute values, and will return all attribute values of the node if input is empty.
+ * @param {Element} node The html node
+ * @param {...string} attrs Attribute names
+ * @returns {Object.<string, string>} An object of attr values.
+ */
+const getNodeAttrs = function(node, ...attrs){
+  const names = attrs.length ? attrs : node.getAttributeNames()
+  return names.reduce((attrObj, name) => {
+    attrObj[attrNameMap[name] || name] = node.getAttribute(name);
+    return attrObj;
+  }, {})
+}
+
 /**
  * 這個是使用 Slate Editor，幾乎必備的邏輯。提供 slate 自已 maintain
  * 的 document model 跟 html string 之間轉換。每一種 node 都要有對
@@ -56,7 +78,7 @@ const rules = [
       switch (type) {
         case 'iframe': {
           // <iframe> could have 'video' or 'audio' type node, we need to distinguish them by src
-          const src = el.getAttribute('src');
+          const { src } = getNodeAttrs(el, 'src');
           const newType = getIframeType(src);
           if (!newType) { return undefined; }
           return {
@@ -68,23 +90,20 @@ const rules = [
           };
         }
         case 'image': {
-          const src = el.getAttribute('src');
-          const alt = el.getAttribute('alt');
           return {
             object: 'block',
             type,
             nodes: next(el.childNodes),
-            data: { src, alt },
+            data: getNodeAttrs(el, 'src', 'alt'),
             isVoid: true,
           };
         }
         case 'test': {
-          const className = el.getAttribute('class');
           return {
             object: 'block',
             type,
             nodes: next(el.childNodes),
-            data: { className },
+            data: getNodeAttrs(el, 'class'),
           };
         }
         default: return {
@@ -106,7 +125,10 @@ const rules = [
         case 'image': {
           const src = object.data.get('src');
           const alt = object.data.get('alt');
-          return <img src={src} alt={alt} />;
+          const href = object.data.get('href');
+          const target = object.data.get('target');
+          const rel = target && 'noopener noreferrer';
+          return href ? <a href={href} target={target} rel={rel}><img src={src} alt={alt} /></a> : <img src={src} alt={alt} />;
         }
         case 'pre': return <pre>{children}</pre>;
         // while serialization, these 2 types sharing <iframe> tag
@@ -131,14 +153,20 @@ const rules = [
       if (!type) return undefined;
       switch (type) {
         case 'link': {
-          const href = el.getAttribute('href');
-          const target = el.getAttribute('target');
-          const data = { href, target };
-          return {
+          const { href, target } = getNodeAttrs(el, 'href', 'target');
+          const child = el.childNodes[0]
+
+          // 為了 linkedImg 做的 patch，假如子元素是圖片則作為圖片處理
+          return child.tagName === 'IMG' ? {
+            object: 'block',
+            type: 'image',
+            data: { href, target, ...getNodeAttrs(child, 'src', 'alt') },
+            isVoid: true,
+          } : {
             object: 'inline',
             type,
             nodes: next(el.childNodes),
-            data,
+            data: { href, target },
           };
         }
         default: return null;
@@ -150,8 +178,9 @@ const rules = [
         case 'link': {
           const href = object.data.get('href');
           const target = object.data.get('target');
+          const rel = target && 'noopener noreferrer';
           if (target) {
-            return <a href={href} target={target}>{children}</a>;
+            return <a href={href} target={target} rel={rel}>{children}</a>;
           }
           return <a href={href}>{children}</a>;
         }
