@@ -157,7 +157,7 @@ const rules = [
           const child = el.childNodes[0]
 
           // 為了 linkedImg 做的 patch，假如子元素是圖片則作為圖片處理
-          return child.tagName === 'IMG' ? {
+          return child && child.tagName === 'IMG' ? {
             object: 'block',
             type: 'image',
             data: { href, target, ...getNodeAttrs(child, 'src', 'alt') },
